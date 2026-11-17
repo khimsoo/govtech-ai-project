@@ -39,3 +39,22 @@ Below the confidence threshold, save draft and escalate to backoffice officers t
 ## How we measure trust (Expert)
 
 Accept-as-is rate: the share of drafts officers send without edits, checked weekly. Target: 95% cleared within a day, and provide feedback to officers how to improve the design of guideline and models to speed up time to approval
+
+## AI-UX readiness
+
+**Scenario:** B · ICA passport applications
+**Moment:** When applicants fills up the passport application form
+**Level reached:** 3 of 3
+**What we ship:** Invisible UI is earned. Keep measuring the correction rate, and revert to a validator UI if people start fixing the AI's work.
+
+### Levels
+
+- Level 01 · Trigger Accuracy: Pass. validate each input based on the guideline and rules
+- Level 02 · System Transparency: Pass. how the steps, basis and assessment outcome for any data or documents against the ICA rules or guideline
+- Level 03 · Invisible Integration: Pass. include client side validator UI to reduce lag and improve validation rate
+
+### Trust gaps
+
+- Black box: whenever users upload their passport photos Move: provide a consistent ui open the source document and assessment rules
+- Hallucination: provide step by step assessment of the uploaded photo against the rules Move: provide a simple UI to view the validation rules and assessment results
+- Control: not filled in yet
