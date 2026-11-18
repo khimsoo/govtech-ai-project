@@ -12,7 +12,7 @@ Extracted from day2-validate/prototype code. All data is synthetic.
 
 ---
 
-## 1. Product overview
+## 1. Product overview <present>
 
 **What it is:** A passport application prototype for ICA that provides just-in-time guidance and validation to reduce submission errors.
 
@@ -24,7 +24,7 @@ Extracted from day2-validate/prototype code. All data is synthetic.
 
 ---
 
-## 2. Problem and riskiest assumption
+## 2. Problem and riskiest assumption <present>
 
 **Problem (from code context):**
 - 520,000 applications per year, 65% online
@@ -91,7 +91,7 @@ Officer Review Portal
 
 ---
 
-## 4. Success metrics
+## 4. Success metrics <partial>
 
 **From one-pager.md — what the prototype should move:**
 
