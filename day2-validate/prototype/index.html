@@ -281,6 +281,126 @@
                     </div>
                 </form>
             </div>
+
+            <!-- STEP 3: Review -->
+            <div id="step3" class="step-content" style="display: none;">
+                <div class="progress">
+                    <div class="step completed">1. Tell us who ✓</div>
+                    <div class="step completed">2. Fill details ✓</div>
+                    <div class="step active">3. Review</div>
+                </div>
+
+                <div class="step-header">
+                    <button type="button" class="btn-back" id="back-to-step2">← Back</button>
+                    <div>
+                        <h2>Review Your Application</h2>
+                        <p class="subtitle">Check everything is correct before submitting.</p>
+                    </div>
+                </div>
+
+                <!-- Review Summary -->
+                <div class="review-section">
+                    <div class="review-card">
+                        <div class="review-header">
+                            <h3>Child's Information</h3>
+                            <button type="button" class="btn-edit">Edit</button>
+                        </div>
+                        <div class="review-grid">
+                            <div class="review-item">
+                                <span class="review-label">Full name:</span>
+                                <span class="review-value" id="review-child-name">-</span>
+                            </div>
+                            <div class="review-item">
+                                <span class="review-label">NRIC / Birth Cert No.:</span>
+                                <span class="review-value" id="review-child-nric">-</span>
+                            </div>
+                            <div class="review-item">
+                                <span class="review-label">Date of birth:</span>
+                                <span class="review-value" id="review-child-dob">-</span>
+                            </div>
+                            <div class="review-item">
+                                <span class="review-label">Current passport:</span>
+                                <span class="review-value" id="review-current-passport">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <h3>Parent / Guardian 1</h3>
+                            <button type="button" class="btn-edit">Edit</button>
+                        </div>
+                        <div class="review-grid">
+                            <div class="review-item">
+                                <span class="review-label">Full name:</span>
+                                <span class="review-value" id="review-parent1-name">-</span>
+                            </div>
+                            <div class="review-item">
+                                <span class="review-label">NRIC:</span>
+                                <span class="review-value" id="review-parent1-nric">-</span>
+                            </div>
+                            <div class="review-item">
+                                <span class="review-label">Relationship:</span>
+                                <span class="review-value" id="review-parent1-relationship">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-card" id="review-parent2-section">
+                        <div class="review-header">
+                            <h3>Parent / Guardian 2</h3>
+                            <button type="button" class="btn-edit">Edit</button>
+                        </div>
+                        <div class="review-grid">
+                            <div class="review-item">
+                                <span class="review-label">Full name:</span>
+                                <span class="review-value" id="review-parent2-name">-</span>
+                            </div>
+                            <div class="review-item">
+                                <span class="review-label">NRIC:</span>
+                                <span class="review-value" id="review-parent2-nric">-</span>
+                            </div>
+                            <div class="review-item">
+                                <span class="review-label">Relationship:</span>
+                                <span class="review-value" id="review-parent2-relationship">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <h3>Photo Validation</h3>
+                        </div>
+                        <div class="review-grid">
+                            <div class="review-item full-width">
+                                <span class="review-label">AI Photo Check:</span>
+                                <span class="review-value" id="review-photo-status">-</span>
+                            </div>
+                        </div>
+                        <p class="made-up" style="margin-top: 8px;">AI confidence is simulated for prototype.</p>
+                    </div>
+                </div>
+
+                <!-- Officer Checklist Preview -->
+                <div class="checklist-preview">
+                    <h3>What the officer will verify</h3>
+                    <p class="subtitle">Make sure you can tick all these before submitting.</p>
+                    <ul class="check-list" id="review-checklist">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+
+                <!-- Submit Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn-primary" id="submit-btn">
+                        Submit Application
+                    </button>
+                </div>
+
+                <p class="made-up" style="text-align: center; margin-top: 16px;">
+                    This is a prototype. No real application will be submitted.
+                </p>
+            </div>
         </main>
 
         <footer>
@@ -303,6 +423,34 @@
             </div>
         </div>
 
+        <!-- Success Modal (Step 3) -->
+        <div id="success-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content success-modal">
+                <div class="modal-icon">✓</div>
+                <h2>Application Submitted</h2>
+                <p>Your child passport renewal application has been submitted successfully.</p>
+                <div class="success-details">
+                    <div class="success-item">
+                        <span class="success-label">Application ID:</span>
+                        <span class="success-value" id="success-app-id">-</span>
+                    </div>
+                    <div class="success-item">
+                        <span class="success-label">Collection Date:</span>
+                        <span class="success-value" id="success-collection-date">-</span>
+                    </div>
+                    <div class="success-item">
+                        <span class="success-label">Location:</span>
+                        <span class="success-value">ICA Building, Level 3, Counter 12-15</span>
+                    </div>
+                </div>
+                <p style="margin-top: 16px;">Bring your original NRIC and this notification when collecting.</p>
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="closeSuccessModal()">Done</button>
+                </div>
+                <p class="made-up" style="margin-top: 16px;">This is a prototype. No real application was submitted.</p>
+            </div>
+        </div>
+
         <!-- Test Controls (for Behavior prompt testing) -->
         <div class="test-controls">
             <p><strong>Test Controls</strong> (made-up for prototype)</p>
@@ -313,6 +461,13 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <!-- Modular JS -->
+    <script src="js/config.js"></script>
+    <script src="js/validators.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/step1-triage.js"></script>
+    <script src="js/step2-form.js"></script>
+    <script src="js/step3-review.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
