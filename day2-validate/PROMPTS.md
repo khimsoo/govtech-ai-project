@@ -18,7 +18,9 @@ allow applicant to submit multiple application at one time
 **Edge cases:**
 - cannot submit empty forms and ensure everything is checked
 
-**Result:** _fill in after you run it: what worked, what broke._
+**Result:**
+- **Worked:** Officer portal with 3 pending applications, approve/reject/escalate buttons, draft reply editing before send, batch application with collated collection dates, empty reply blocked with alert, placeholder text check prevents incomplete replies
+- **Broke:** Nothing major. Minor: validation results hard-coded rather than dynamic
 
 ## 2. Behavior
 
@@ -33,7 +35,9 @@ allow applicant to submit multiple application at one time
 **Edge cases:**
 - when rules or ai return error, it should bock them from processing but save their progress
 
-**Result:** _fill in after you run it: what worked, what broke._
+**Result:**
+- **Worked:** Error modal shows "System Temporarily Unavailable" with specific message, progress saved to localStorage with timestamp, test controls bar triggers policy/AI failures, modal shows "try again another day" and saved timestamp
+- **Broke:** Modal z-index needed adjustment to appear over form. Fixed by ensuring modal-overlay has position:fixed and z-index:1000
 
 ## 3. Refine
 
@@ -43,5 +47,8 @@ allow applicant to submit multiple application at one time
 - if the fields are empty, stop the job
 
 **Edge cases:**
+- Empty fields already handled by existing validation
 
-**Result:** _fill in after you run it: what worked, what broke._
+**Result:**
+- **Worked:** Labels now match exactly across application form, officer portal, and email replies. Child's name included in all reply templates. Batch application labels also updated.
+- **Broke:** Nothing. Straightforward find-and-replace update.
