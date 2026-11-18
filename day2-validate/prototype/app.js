@@ -3,24 +3,41 @@
 
 // ==================== STEP 1: TRIAGE ====================
 
-const GUIDANCE = {
-    adult: "Adults (18+) can apply on their own behalf. You will need your NRIC and a recent photo.",
-    child: "For children under 18, a parent or legal guardian (21+) must submit the application and provide consent. (Made-up rule)"
+// Guidance for "who are you applying for" (made-up rules)
+const APPLICANT_GUIDANCE = {
+    myself: "You will need your NRIC and a recent passport photo. Processing takes 4-6 working days. (Made-up rule)",
+    onbehalf: "Please select who you are applying on behalf of. Different documents are required depending on the person. (Made-up rule)"
 };
 
+// Guidance for "on behalf of who" (made-up rules)
+const BEHALF_GUIDANCE = {
+    child: "For children under 18, both parents must consent. You will need the child's birth certificate and both parents' NRICs. (Made-up rule)",
+    adult: "You will need a letter of authorisation and the applicant's NRIC. The applicant must sign the photo. (Made-up rule)"
+};
+
+// Guidance for application type (made-up rules)
 const APPLICATION_GUIDANCE = {
-    new: "First-time applicants need a birth certificate or citizenship certificate. (Made-up rule)",
-    renewal: "For renewals, have your current passport ready. It can be expired. (Made-up rule)"
+    new: {
+        myself: "First-time applicants need a birth certificate or citizenship certificate. (Made-up rule)",
+        child: "First-time child applicants need a birth certificate. Both parents must be present or provide notarised consent. (Made-up rule)",
+        adult: "First-time applications on behalf require additional identity verification. (Made-up rule)"
+    },
+    renewal: {
+        myself: "Have your current passport ready. It can be expired up to 2 years. (Made-up rule)",
+        child: "Have the child's current passport ready. It can be expired. Both parents must consent. (Made-up rule)",
+        adult: "Have the current passport ready. The applicant must sign the application form. (Made-up rule)"
+    }
 };
 
+// Requirements for each path (all made-up)
 const REQUIREMENTS = {
-    "adult-new": [
+    "myself-new": [
         "NRIC (front and back)",
         "Recent passport photo (white background)",
         "Birth certificate or citizenship certificate",
         "Processing fee: $70 (made-up)"
     ],
-    "adult-renewal": [
+    "myself-renewal": [
         "NRIC (front and back)",
         "Recent passport photo (white background)",
         "Current or expired passport",
@@ -39,28 +56,80 @@ const REQUIREMENTS = {
         "Both parents' NRICs",
         "Consent form signed by both parents",
         "Processing fee: $70 (made-up)"
+    ],
+    "adult-new": [
+        "Applicant's NRIC (front and back)",
+        "Recent passport photo (signed by applicant)",
+        "Birth certificate or citizenship certificate",
+        "Letter of authorisation",
+        "Your NRIC (as representative)",
+        "Processing fee: $70 (made-up)"
+    ],
+    "adult-renewal": [
+        "Applicant's NRIC (front and back)",
+        "Recent passport photo (signed by applicant)",
+        "Current or expired passport",
+        "Letter of authorisation",
+        "Your NRIC (as representative)",
+        "Processing fee: $70 (made-up)"
     ]
 };
 
 // Step 1 DOM elements
 const triageForm = document.getElementById('triage-form');
 const applicantRadios = document.querySelectorAll('input[name="applicant-type"]');
+const behalfRadios = document.querySelectorAll('input[name="behalf-type"]');
 const applicationRadios = document.querySelectorAll('input[name="application-type"]');
 const applicantGuidance = document.getElementById('applicant-guidance');
+const behalfGuidance = document.getElementById('behalf-guidance');
 const applicationGuidance = document.getElementById('application-guidance');
+const behalfDetails = document.getElementById('behalf-details');
 const previewBox = document.getElementById('preview-box');
 const requirementsList = document.getElementById('requirements-list');
 const nextBtn = document.getElementById('next-btn');
 
 // Track selections
-let applicantType = null;
-let applicationType = null;
+let applyingFor = null;      // 'myself' or 'onbehalf'
+let behalfType = null;       // 'child' or 'adult' (only if onbehalf)
+let applicationType = null;  // 'new' or 'renewal'
 
-// Update guidance when applicant type changes
+// Get the effective applicant type for requirements lookup
+function getEffectiveApplicantType() {
+    if (applyingFor === 'myself') return 'myself';
+    return behalfType; // 'child' or 'adult'
+}
+
+// Update guidance when "who are you applying for" changes
 applicantRadios.forEach(radio => {
     radio.addEventListener('change', (e) => {
-        applicantType = e.target.value;
-        applicantGuidance.textContent = GUIDANCE[applicantType];
+        applyingFor = e.target.value;
+        applicantGuidance.textContent = APPLICANT_GUIDANCE[applyingFor];
+
+        // Show/hide "on behalf of" follow-up question
+        if (applyingFor === 'onbehalf') {
+            behalfDetails.style.display = 'block';
+            // Clear behalf selection when showing
+            behalfRadios.forEach(r => r.checked = false);
+            behalfType = null;
+            if (behalfGuidance) behalfGuidance.textContent = '';
+        } else {
+            behalfDetails.style.display = 'none';
+            behalfType = null;
+        }
+
+        updateApplicationGuidance();
+        updatePreview();
+    });
+});
+
+// Update guidance when "on behalf of who" changes
+behalfRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        behalfType = e.target.value;
+        if (behalfGuidance) {
+            behalfGuidance.textContent = BEHALF_GUIDANCE[behalfType];
+        }
+        updateApplicationGuidance();
         updatePreview();
     });
 });
@@ -69,23 +138,44 @@ applicantRadios.forEach(radio => {
 applicationRadios.forEach(radio => {
     radio.addEventListener('change', (e) => {
         applicationType = e.target.value;
-        applicationGuidance.textContent = APPLICATION_GUIDANCE[applicationType];
+        updateApplicationGuidance();
         updatePreview();
     });
 });
 
+// Update the application type guidance based on current selections
+function updateApplicationGuidance() {
+    if (!applicationType) {
+        applicationGuidance.textContent = '';
+        return;
+    }
+
+    const effectiveType = getEffectiveApplicantType();
+    if (effectiveType && APPLICATION_GUIDANCE[applicationType]) {
+        applicationGuidance.textContent = APPLICATION_GUIDANCE[applicationType][effectiveType] || '';
+    }
+}
+
 // Update preview box and enable/disable button
 function updatePreview() {
-    if (applicantType && applicationType) {
-        const key = `${applicantType}-${applicationType}`;
+    const effectiveType = getEffectiveApplicantType();
+
+    // Need all selections to show preview
+    const hasAllSelections = applyingFor && applicationType &&
+        (applyingFor === 'myself' || behalfType);
+
+    if (hasAllSelections) {
+        const key = `${effectiveType}-${applicationType}`;
         const requirements = REQUIREMENTS[key];
 
-        requirementsList.innerHTML = requirements
-            .map(req => `<li>${req}</li>`)
-            .join('');
+        if (requirements) {
+            requirementsList.innerHTML = requirements
+                .map(req => `<li>${req}</li>`)
+                .join('');
 
-        previewBox.style.display = 'block';
-        nextBtn.disabled = false;
+            previewBox.style.display = 'block';
+            nextBtn.disabled = false;
+        }
     } else {
         previewBox.style.display = 'none';
         nextBtn.disabled = true;
@@ -96,14 +186,19 @@ function updatePreview() {
 triageForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    // For prototype, we only show Step 2 for child renewal
-    if (applicantType === 'child' && applicationType === 'renewal') {
+    const effectiveType = getEffectiveApplicantType();
+
+    // For prototype, we only show Step 2 for child renewal (most confused group)
+    if (effectiveType === 'child' && applicationType === 'renewal') {
         showStep2();
     } else {
         alert(
-            `Path: ${applicantType} ${applicationType}\n\n` +
-            `This prototype only includes the "child renewal" path (the most confused user group).\n\n` +
-            `Please select Child + Renewal to continue.`
+            `Path: ${applyingFor === 'myself' ? 'For myself' : 'On behalf of ' + behalfType} - ${applicationType}\n\n` +
+            `This prototype only includes the "child renewal" path (parents applying on behalf of their child).\n\n` +
+            `Please select:\n` +
+            `• "On behalf of someone" → "My child (under 18)"\n` +
+            `• "Renewal"\n\n` +
+            `to continue to Step 2.`
         );
     }
 });
