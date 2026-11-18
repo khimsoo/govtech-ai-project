@@ -437,10 +437,159 @@ singleParentCheckbox?.addEventListener('change', () => {
     updateProgress();
 });
 
+// ==================== BEHAVIOR: ERROR HANDLING & SAVE PROGRESS ====================
+
+// Simulated system state (made-up)
+let systemStatus = {
+    policyService: true,  // Set to false to simulate policy error
+    aiPhotoService: true, // Set to false to simulate AI error
+    lastError: null
+};
+
+// Save progress to localStorage (simulated)
+function saveProgress() {
+    const formData = {};
+    Object.keys(VALIDATORS).forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            formData[fieldId] = field.value;
+        }
+    });
+    formData.singleParent = document.getElementById('single-parent')?.checked || false;
+    formData.savedAt = new Date().toISOString();
+
+    localStorage.setItem('passport-application-draft', JSON.stringify(formData));
+    console.log('Progress saved:', formData);
+    return formData;
+}
+
+// Load saved progress
+function loadProgress() {
+    const saved = localStorage.getItem('passport-application-draft');
+    if (saved) {
+        try {
+            const formData = JSON.parse(saved);
+            Object.keys(formData).forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field && fieldId !== 'savedAt' && fieldId !== 'singleParent') {
+                    field.value = formData[fieldId];
+                    if (formData[fieldId]) {
+                        validateField(fieldId);
+                    }
+                }
+            });
+            if (formData.singleParent) {
+                const checkbox = document.getElementById('single-parent');
+                if (checkbox) {
+                    checkbox.checked = true;
+                    checkbox.dispatchEvent(new Event('change'));
+                }
+            }
+            return formData;
+        } catch (e) {
+            console.error('Failed to load saved progress:', e);
+        }
+    }
+    return null;
+}
+
+// Show system error modal
+function showSystemError(errorType, message) {
+    // Save progress before showing error
+    const savedData = saveProgress();
+
+    const errorModal = document.getElementById('system-error-modal');
+    const errorMessage = document.getElementById('system-error-message');
+    const errorDetails = document.getElementById('system-error-details');
+
+    if (errorModal && errorMessage) {
+        errorMessage.textContent = message;
+        errorDetails.textContent = `Your progress has been saved. You can resume later.\nSaved at: ${new Date().toLocaleString()}\nError type: ${errorType} (made-up error for testing)`;
+        errorModal.style.display = 'flex';
+    }
+
+    systemStatus.lastError = { type: errorType, message, time: new Date() };
+}
+
+// Close error modal
+function closeSystemError() {
+    const errorModal = document.getElementById('system-error-modal');
+    if (errorModal) {
+        errorModal.style.display = 'none';
+    }
+}
+
+// Simulate policy service call (made-up)
+function checkPolicyService() {
+    if (!systemStatus.policyService) {
+        return { success: false, error: 'Policy service unavailable' };
+    }
+    return { success: true };
+}
+
+// Simulate AI photo service call (made-up)
+function checkAIPhotoService() {
+    if (!systemStatus.aiPhotoService) {
+        return { success: false, error: 'AI photo validation service unavailable' };
+    }
+    // Simulate random confidence
+    return { success: true, confidence: Math.random() * 0.3 + 0.7 };
+}
+
+// FORCED FAILURE: Trigger system error (for testing)
+function triggerSystemFailure(service) {
+    if (service === 'policy') {
+        systemStatus.policyService = false;
+        showSystemError('POLICY_ERROR', 'The policy validation service is temporarily unavailable. Please try again another day.');
+    } else if (service === 'ai') {
+        systemStatus.aiPhotoService = false;
+        showSystemError('AI_SERVICE_ERROR', 'The AI photo validation service is temporarily unavailable. Please try again another day.');
+    }
+}
+
+// Reset system (for testing)
+function resetSystem() {
+    systemStatus.policyService = true;
+    systemStatus.aiPhotoService = true;
+    systemStatus.lastError = null;
+    closeSystemError();
+}
+
+// Auto-save on field change
+Object.keys(VALIDATORS).forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+        field.addEventListener('change', () => {
+            saveProgress();
+        });
+    }
+});
+
+// Load saved progress on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const saved = loadProgress();
+    if (saved && saved.savedAt) {
+        console.log('Resumed from saved progress:', saved.savedAt);
+    }
+});
+
 // Handle Step 2 form submission
 const detailsForm = document.getElementById('details-form');
 detailsForm?.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    // BEHAVIOR: Check system services before proceeding
+    const policyCheck = checkPolicyService();
+    if (!policyCheck.success) {
+        showSystemError('POLICY_ERROR', 'The policy validation service is temporarily unavailable. Please try again another day.');
+        return;
+    }
+
+    const aiCheck = checkAIPhotoService();
+    if (!aiCheck.success) {
+        showSystemError('AI_SERVICE_ERROR', 'The AI photo validation service is temporarily unavailable. Please try again another day.');
+        return;
+    }
 
     // Validate all fields
     const formData = getFormData();
@@ -470,12 +619,15 @@ detailsForm?.addEventListener('submit', (e) => {
         errorListEl.innerHTML = errors.map(e => `<li>${e}</li>`).join('');
         summaryEl.style.display = 'block';
         summaryEl.scrollIntoView({ behavior: 'smooth' });
+        // Save progress even on validation error
+        saveProgress();
     } else {
         summaryEl.style.display = 'none';
 
         // Success - show confirmation (Step 3 not built)
         alert(
             `✓ All fields validated!\n\n` +
+            `AI Photo confidence: ${(aiCheck.confidence * 100).toFixed(0)}%\n\n` +
             `In the full prototype, this would show Step 3: Review.\n\n` +
             `The review screen would display:\n` +
             `• Summary of all entered data\n` +
@@ -485,3 +637,9 @@ detailsForm?.addEventListener('submit', (e) => {
         );
     }
 });
+
+// Expose functions for testing in console
+window.triggerSystemFailure = triggerSystemFailure;
+window.resetSystem = resetSystem;
+window.saveProgress = saveProgress;
+window.loadProgress = loadProgress;
