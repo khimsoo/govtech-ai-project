@@ -286,6 +286,31 @@
         <footer>
             <p class="made-up">This is a prototype with synthetic data. Not a real government service.</p>
         </footer>
+
+        <!-- System Error Modal (Behavior prompt) -->
+        <div id="system-error-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content error-modal">
+                <div class="modal-icon">⚠️</div>
+                <h2>System Temporarily Unavailable</h2>
+                <p id="system-error-message">An error has occurred.</p>
+                <div class="error-details">
+                    <pre id="system-error-details"></pre>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="closeSystemError()">OK, I'll try later</button>
+                </div>
+                <p class="made-up" style="margin-top: 16px;">This is a made-up error for prototype testing.</p>
+            </div>
+        </div>
+
+        <!-- Test Controls (for Behavior prompt testing) -->
+        <div class="test-controls">
+            <p><strong>Test Controls</strong> (made-up for prototype)</p>
+            <button onclick="triggerSystemFailure('policy')">Trigger Policy Error</button>
+            <button onclick="triggerSystemFailure('ai')">Trigger AI Error</button>
+            <button onclick="resetSystem()">Reset System</button>
+            <button onclick="saveProgress(); alert('Progress saved!')">Save Progress</button>
+        </div>
     </div>
 
     <script src="app.js"></script>

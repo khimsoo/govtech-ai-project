@@ -401,3 +401,102 @@ select.invalid {
     margin-top: 8px;
     text-align: center;
 }
+
+/* System Error Modal (Behavior prompt) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    max-width: 480px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.error-modal {
+    border-top: 4px solid #c41e3a;
+}
+
+.modal-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+}
+
+.modal-content h2 {
+    color: #c41e3a;
+    margin-bottom: 12px;
+}
+
+.modal-content p {
+    margin-bottom: 16px;
+    color: #333;
+}
+
+.error-details {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.error-details pre {
+    font-size: 0.85rem;
+    color: #666;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* Test Controls */
+.test-controls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #333;
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    z-index: 100;
+}
+
+.test-controls p {
+    margin: 0;
+}
+
+.test-controls button {
+    padding: 6px 12px;
+    background: #495057;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.test-controls button:hover {
+    background: #6c757d;
+}
