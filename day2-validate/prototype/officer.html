@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer Review Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="officer.css">
+</head>
+<body>
+    <div class="container officer-portal">
+        <header>
+            <div class="logo">ICA</div>
+            <h1>Officer Review Portal</h1>
+            <p class="officer-badge">Logged in as: Officer Tan (made-up)</p>
+        </header>
+
+        <div class="notice">
+            <strong>Prototype with made-up data.</strong> All applications and data shown are synthetic examples for testing purposes only.
+        </div>
+
+        <main>
+            <!-- Pending Applications Queue -->
+            <section class="queue-section">
+                <h2>Pending Applications <span class="badge">3</span></h2>
+                <p class="subtitle">Review, approve, reject or escalate. Never send reply without action.</p>
+
+                <!-- Application 1 -->
+                <div class="application-card" id="app-001">
+                    <div class="app-header">
+                        <div class="app-id">
+                            <strong>APP-2024-001</strong>
+                            <span class="app-type">Child Renewal</span>
+                        </div>
+                        <div class="app-submitted">Submitted: 18 Nov 2024, 10:32am (made-up)</div>
+                    </div>
+
+                    <div class="app-summary">
+                        <div class="summary-row">
+                            <span class="label">Child:</span>
+                            <span class="value">TAN WEI MING (T1234567A)</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="label">Parent 1:</span>
+                            <span class="value">TAN AH KOW (S1234567A) - Father</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="label">Parent 2:</span>
+                            <span class="value">LIM MEI LING (S7654321B) - Mother</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="label">Current Passport:</span>
+                            <span class="value">E1234567A (expired 2024-01-15)</span>
+                        </div>
+                    </div>
+
+                    <div class="app-checks">
+                        <h4>Validation Results</h4>
+                        <ul class="check-list">
+                            <li class="check-pass">✓ NRIC format valid</li>
+                            <li class="check-pass">✓ Child under 18 (age: 8)</li>
+                            <li class="check-pass">✓ Both parents provided</li>
+                            <li class="check-pass">✓ Parents over 21</li>
+                            <li class="check-warn">⚠️ AI Photo: Background slightly off-white (confidence: 72%)</li>
+                        </ul>
+                    </div>
+
+                    <div class="app-actions">
+                        <div class="action-buttons">
+                            <button class="btn-approve" onclick="showDraftReply('app-001', 'approve')">✓ Approve</button>
+                            <button class="btn-reject" onclick="showDraftReply('app-001', 'reject')">✗ Reject</button>
+                            <button class="btn-escalate" onclick="showDraftReply('app-001', 'escalate')">↑ Escalate</button>
+                        </div>
+                    </div>
+
+                    <!-- Draft Reply (hidden until action selected) -->
+                    <div class="draft-reply" id="draft-app-001" style="display: none;">
+                        <h4>Draft Reply to Applicant</h4>
+                        <p class="draft-note">Edit before sending. Reply will not be sent without your confirmation.</p>
+                        <textarea id="reply-text-app-001" rows="6"></textarea>
+                        <div class="draft-actions">
+                            <button class="btn-secondary" onclick="cancelDraft('app-001')">Cancel</button>
+                            <button class="btn-primary" onclick="sendReply('app-001')">Send Reply</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Application 2 -->
+                <div class="application-card" id="app-002">
+                    <div class="app-header">
+                        <div class="app-id">
+                            <strong>APP-2024-002</strong>
+                            <span class="app-type">Child Renewal</span>
+                        </div>
+                        <div class="app-submitted">Submitted: 18 Nov 2024, 11:15am (made-up)</div>
+                    </div>
+
+                    <div class="app-summary">
+                        <div class="summary-row">
+                            <span class="label">Child:</span>
+                            <span class="value">LEE XIAO MING (T2345678B)</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="label">Parent 1:</span>
+                            <span class="value">LEE WEI LIANG (S2345678B) - Father</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="label">Parent 2:</span>
+                            <span class="value">WONG MEI HUA (S8765432C) - Mother</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="label">Current Passport:</span>
+                            <span class="value">E2345678B (expires 2025-03-20)</span>
+                        </div>
+                    </div>
+
+                    <div class="app-checks">
+                        <h4>Validation Results</h4>
+                        <ul class="check-list">
+                            <li class="check-pass">✓ NRIC format valid</li>
+                            <li class="check-pass">✓ Child under 18 (age: 12)</li>
+                            <li class="check-pass">✓ Both parents provided</li>
+                            <li class="check-pass">✓ Parents over 21</li>
+                            <li class="check-pass">✓ AI Photo: All checks passed (confidence: 95%)</li>
+                        </ul>
+                    </div>
+
+                    <div class="app-actions">
+                        <div class="action-buttons">
+                            <button class="btn-approve" onclick="showDraftReply('app-002', 'approve')">✓ Approve</button>
+                            <button class="btn-reject" onclick="showDraftReply('app-002', 'reject')">✗ Reject</button>
+                            <button class="btn-escalate" onclick="showDraftReply('app-002', 'escalate')">↑ Escalate</button>
+                        </div>
+                    </div>
+
+                    <div class="draft-reply" id="draft-app-002" style="display: none;">
+                        <h4>Draft Reply to Applicant</h4>
+                        <p class="draft-note">Edit before sending. Reply will not be sent without your confirmation.</p>
+                        <textarea id="reply-text-app-002" rows="6"></textarea>
+                        <div class="draft-actions">
+                            <button class="btn-secondary" onclick="cancelDraft('app-002')">Cancel</button>
+                            <button class="btn-primary" onclick="sendReply('app-002')">Send Reply</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Application 3: Multiple applications from same applicant -->
+                <div class="application-card" id="app-003">
+                    <div class="app-header">
+                        <div class="app-id">
+                            <strong>APP-2024-003</strong>
+                            <span class="app-type">Multiple Applications (2)</span>
+                            <span class="badge-multi">Batch</span>
+                        </div>
+                        <div class="app-submitted">Submitted: 18 Nov 2024, 2:45pm (made-up)</div>
+                    </div>
+
+                    <div class="batch-notice">
+                        <strong>ℹ️ This applicant submitted 2 applications together.</strong>
+                        Collection dates will be collated in the reply.
+                    </div>
+
+                    <div class="batch-applications">
+                        <!-- Child 1 -->
+                        <div class="batch-app">
+                            <h5>Application 3A: Child 1</h5>
+                            <div class="app-summary">
+                                <div class="summary-row">
+                                    <span class="label">Child:</span>
+                                    <span class="value">CHEN YU XIN (T3456789C) - Age 6</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="label">Current Passport:</span>
+                                    <span class="value">E3456789C (expired 2024-06-01)</span>
+                                </div>
+                            </div>
+                            <ul class="check-list">
+                                <li class="check-pass">✓ All validations passed</li>
+                                <li class="check-pass">✓ AI Photo: Passed (confidence: 91%)</li>
+                            </ul>
+                        </div>
+
+                        <!-- Child 2 -->
+                        <div class="batch-app">
+                            <h5>Application 3B: Child 2</h5>
+                            <div class="app-summary">
+                                <div class="summary-row">
+                                    <span class="label">Child:</span>
+                                    <span class="value">CHEN YU HAN (T4567890D) - Age 4</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="label">Current Passport:</span>
+                                    <span class="value">E4567890D (expired 2024-08-15)</span>
+                                </div>
+                            </div>
+                            <ul class="check-list">
+                                <li class="check-pass">✓ All validations passed</li>
+                                <li class="check-pass">✓ AI Photo: Passed (confidence: 88%)</li>
+                            </ul>
+                        </div>
+
+                        <!-- Shared Parent Info -->
+                        <div class="batch-shared">
+                            <h5>Shared Parent Information</h5>
+                            <div class="summary-row">
+                                <span class="label">Parent 1:</span>
+                                <span class="value">CHEN WEI JIE (S3456789C) - Father</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="label">Parent 2:</span>
+                                <span class="value">TAN LI TING (S9876543D) - Mother</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="app-actions">
+                        <div class="action-buttons">
+                            <button class="btn-approve" onclick="showDraftReply('app-003', 'approve-batch')">✓ Approve Both</button>
+                            <button class="btn-reject" onclick="showDraftReply('app-003', 'reject')">✗ Reject</button>
+                            <button class="btn-escalate" onclick="showDraftReply('app-003', 'escalate')">↑ Escalate</button>
+                        </div>
+                    </div>
+
+                    <div class="draft-reply" id="draft-app-003" style="display: none;">
+                        <h4>Draft Reply to Applicant</h4>
+                        <p class="draft-note">Edit before sending. Reply will not be sent without your confirmation.</p>
+                        <textarea id="reply-text-app-003" rows="8"></textarea>
+                        <div class="draft-actions">
+                            <button class="btn-secondary" onclick="cancelDraft('app-003')">Cancel</button>
+                            <button class="btn-primary" onclick="sendReply('app-003')">Send Reply</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sent Replies Log -->
+            <section class="sent-section" id="sent-section" style="display: none;">
+                <h2>Sent Replies</h2>
+                <div id="sent-log"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p class="made-up">This is a prototype with synthetic data. Not a real government service.</p>
+        </footer>
+    </div>
+
+    <script src="officer.js"></script>
+</body>
+</html>

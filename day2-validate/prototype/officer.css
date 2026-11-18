@@ -1,0 +1,333 @@
+/* Officer Portal Styles */
+
+.officer-portal {
+    max-width: 900px;
+}
+
+.officer-badge {
+    display: inline-block;
+    background: #e9ecef;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #495057;
+    margin-top: 8px;
+}
+
+.queue-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 8px;
+    background: #c41e3a;
+    color: white;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.badge-multi {
+    display: inline-block;
+    background: #1c7ed6;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    margin-left: 8px;
+}
+
+.application-card {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.app-id strong {
+    font-size: 1.1rem;
+}
+
+.app-type {
+    display: inline-block;
+    background: #f1f3f4;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-left: 8px;
+    color: #495057;
+}
+
+.app-submitted {
+    font-size: 0.85rem;
+    color: #868e96;
+}
+
+.app-summary {
+    margin-bottom: 16px;
+}
+
+.summary-row {
+    display: flex;
+    padding: 6px 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.summary-row .label {
+    width: 140px;
+    font-weight: 500;
+    color: #495057;
+}
+
+.summary-row .value {
+    flex: 1;
+}
+
+.app-checks {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+}
+
+.app-checks h4 {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    color: #495057;
+}
+
+.check-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.check-list li {
+    padding: 4px 0;
+    font-size: 0.9rem;
+}
+
+.check-pass {
+    color: #2e7d32;
+}
+
+.check-warn {
+    color: #f59f00;
+}
+
+.check-fail {
+    color: #c41e3a;
+}
+
+.app-actions {
+    margin-top: 16px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-approve {
+    padding: 10px 20px;
+    background: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-approve:hover {
+    background: #1b5e20;
+}
+
+.btn-reject {
+    padding: 10px 20px;
+    background: #c41e3a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-reject:hover {
+    background: #a01830;
+}
+
+.btn-escalate {
+    padding: 10px 20px;
+    background: #f59f00;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-escalate:hover {
+    background: #e67700;
+}
+
+.btn-secondary {
+    padding: 10px 20px;
+    background: #e9ecef;
+    color: #495057;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: #dee2e6;
+}
+
+/* Draft Reply */
+.draft-reply {
+    margin-top: 20px;
+    padding: 16px;
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 6px;
+}
+
+.draft-reply h4 {
+    margin-bottom: 8px;
+}
+
+.draft-note {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.draft-reply textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: vertical;
+}
+
+.draft-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    justify-content: flex-end;
+}
+
+/* Batch Applications */
+.batch-notice {
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+}
+
+.batch-applications {
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.batch-app {
+    padding: 16px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.batch-app:last-child {
+    border-bottom: none;
+}
+
+.batch-app h5 {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    color: #1c7ed6;
+}
+
+.batch-shared {
+    padding: 16px;
+    background: #f8f9fa;
+}
+
+.batch-shared h5 {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    color: #495057;
+}
+
+/* Sent Section */
+.sent-section {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 2px solid #e9ecef;
+}
+
+.sent-card {
+    background: #f1f8e9;
+    border: 1px solid #c5e1a5;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.sent-card.rejected {
+    background: #ffebee;
+    border-color: #ef9a9a;
+}
+
+.sent-card.escalated {
+    background: #fff8e1;
+    border-color: #ffe082;
+}
+
+.sent-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.sent-time {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.sent-content {
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    background: white;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 8px;
+}
