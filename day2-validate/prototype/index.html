@@ -31,24 +31,46 @@
                     <p class="subtitle">This helps us show you only the fields and documents you need.</p>
 
                     <div class="form-group">
-                        <label>Who is this passport for?</label>
+                        <label>Who are you applying for?</label>
                         <div class="radio-group">
                             <label class="radio-card">
-                                <input type="radio" name="applicant-type" value="adult" required>
+                                <input type="radio" name="applicant-type" value="myself" required>
                                 <div class="radio-content">
-                                    <span class="radio-title">Adult</span>
-                                    <span class="radio-desc">Applicant is 18 years or older</span>
+                                    <span class="radio-title">For myself</span>
+                                    <span class="radio-desc">I am applying for my own passport</span>
                                 </div>
                             </label>
                             <label class="radio-card">
-                                <input type="radio" name="applicant-type" value="child" required>
+                                <input type="radio" name="applicant-type" value="onbehalf" required>
                                 <div class="radio-content">
-                                    <span class="radio-title">Child</span>
-                                    <span class="radio-desc">Applicant is under 18 years old</span>
+                                    <span class="radio-title">On behalf of someone</span>
+                                    <span class="radio-desc">I am a parent, guardian or authorised representative</span>
                                 </div>
                             </label>
                         </div>
                         <p class="guidance" id="applicant-guidance"></p>
+                    </div>
+
+                    <!-- Follow-up question for "on behalf" -->
+                    <div class="form-group" id="behalf-details" style="display: none;">
+                        <label>Who are you applying on behalf of?</label>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="behalf-type" value="child">
+                                <div class="radio-content">
+                                    <span class="radio-title">My child (under 18)</span>
+                                    <span class="radio-desc">I am the parent or legal guardian</span>
+                                </div>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="behalf-type" value="adult">
+                                <div class="radio-content">
+                                    <span class="radio-title">Another adult</span>
+                                    <span class="radio-desc">Elderly parent, person with disability, etc.</span>
+                                </div>
+                            </label>
+                        </div>
+                        <p class="guidance" id="behalf-guidance"></p>
                     </div>
 
                     <div class="form-group">
