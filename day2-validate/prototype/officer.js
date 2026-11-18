@@ -2,11 +2,16 @@
 // All data is MADE UP for testing purposes
 
 // Draft reply templates (made-up)
+// Labels match the application form exactly for consistency
 const REPLY_TEMPLATES = {
     approve: {
         single: `Dear Applicant,
 
-Your passport application (APP-ID) has been APPROVED.
+Your Child Passport Renewal application (APP-ID) has been APPROVED.
+
+Application Details:
+- Child's full name: CHILD_NAME
+- Application ID: APP-ID
 
 Collection Details:
 - Collection Date: COLLECTION_DATE
@@ -19,12 +24,13 @@ This is a made-up reply for prototype testing.`,
 
         batch: `Dear Applicant,
 
-Your passport applications have been APPROVED.
+Your Child Passport Renewal applications have been APPROVED.
 
-Collection Details (all passports collected together):
+Application Details:
 COLLECTION_LIST
-- Location: ICA Building, Level 3, Counter 12-15
-- Bring: Original NRIC and this notification
+
+Collection Location: ICA Building, Level 3, Counter 12-15
+Bring: Original NRIC and this notification
 
 Please collect within 30 days of the earliest collection date.
 
@@ -33,7 +39,11 @@ This is a made-up reply for prototype testing.`
 
     reject: `Dear Applicant,
 
-Your passport application (APP-ID) requires attention.
+Your Child Passport Renewal application (APP-ID) requires attention.
+
+Application Details:
+- Child's full name: CHILD_NAME
+- Application ID: APP-ID
 
 Issue Found:
 REJECTION_REASON
@@ -47,7 +57,11 @@ This is a made-up reply for prototype testing.`,
 
     escalate: `Dear Applicant,
 
-Your passport application (APP-ID) has been referred for further review.
+Your Child Passport Renewal application (APP-ID) has been referred for further review.
+
+Application Details:
+- Child's full name: CHILD_NAME
+- Application ID: APP-ID
 
 Your case requires additional verification. A senior officer will review your application within 3-5 working days.
 
@@ -94,21 +108,24 @@ function showDraftReply(appId, action) {
 
     if (action === 'approve') {
         template = REPLY_TEMPLATES.approve.single
-            .replace('APP-ID', appData.id)
+            .replace(/APP-ID/g, appData.id)
+            .replace('CHILD_NAME', appData.childName)
             .replace('COLLECTION_DATE', appData.collectionDate);
     } else if (action === 'approve-batch') {
         const collectionList = appData.children
-            .map(c => `- ${c.name}: ${c.collectionDate}`)
-            .join('\n');
+            .map(c => `- Child's full name: ${c.name}\n  Application ID: ${c.id}\n  Collection Date: ${c.collectionDate}`)
+            .join('\n\n');
         template = REPLY_TEMPLATES.approve.batch
             .replace('COLLECTION_LIST', collectionList);
     } else if (action === 'reject') {
         template = REPLY_TEMPLATES.reject
-            .replace('APP-ID', appData.id)
+            .replace(/APP-ID/g, appData.id)
+            .replace('CHILD_NAME', appData.childName)
             .replace('REJECTION_REASON', '[Officer: Enter rejection reason here]');
     } else if (action === 'escalate') {
         template = REPLY_TEMPLATES.escalate
-            .replace('APP-ID', appData.id)
+            .replace(/APP-ID/g, appData.id)
+            .replace('CHILD_NAME', appData.childName)
             .replace('ESCALATION_REF', 'ESC-' + Date.now().toString().slice(-6));
     }
 
