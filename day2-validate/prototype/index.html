@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Passport Application - Step 1</title>
+    <title>Passport Application</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,70 +18,247 @@
         </div>
 
         <main>
-            <div class="progress">
-                <div class="step active">1. Tell us who</div>
-                <div class="step">2. Fill details</div>
-                <div class="step">3. Review</div>
+            <!-- STEP 1: Triage -->
+            <div id="step1" class="step-content">
+                <div class="progress">
+                    <div class="step active">1. Tell us who</div>
+                    <div class="step">2. Fill details</div>
+                    <div class="step">3. Review</div>
+                </div>
+
+                <form id="triage-form">
+                    <h2>Let's start with a few questions</h2>
+                    <p class="subtitle">This helps us show you only the fields and documents you need.</p>
+
+                    <div class="form-group">
+                        <label>Who is this passport for?</label>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="applicant-type" value="adult" required>
+                                <div class="radio-content">
+                                    <span class="radio-title">Adult</span>
+                                    <span class="radio-desc">Applicant is 18 years or older</span>
+                                </div>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="applicant-type" value="child" required>
+                                <div class="radio-content">
+                                    <span class="radio-title">Child</span>
+                                    <span class="radio-desc">Applicant is under 18 years old</span>
+                                </div>
+                            </label>
+                        </div>
+                        <p class="guidance" id="applicant-guidance"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What type of application?</label>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="application-type" value="new" required>
+                                <div class="radio-content">
+                                    <span class="radio-title">New passport</span>
+                                    <span class="radio-desc">First-time application or replacement of lost passport</span>
+                                </div>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="application-type" value="renewal" required>
+                                <div class="radio-content">
+                                    <span class="radio-title">Renewal</span>
+                                    <span class="radio-desc">Current passport expiring or expired</span>
+                                </div>
+                            </label>
+                        </div>
+                        <p class="guidance" id="application-guidance"></p>
+                    </div>
+
+                    <div class="preview-box" id="preview-box" style="display: none;">
+                        <h3>What you'll need</h3>
+                        <p class="made-up">(Made-up requirements for prototype)</p>
+                        <ul id="requirements-list"></ul>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary" id="next-btn" disabled>
+                            Next: Fill in details
+                        </button>
+                    </div>
+                </form>
             </div>
 
-            <form id="triage-form">
-                <h2>Let's start with a few questions</h2>
-                <p class="subtitle">This helps us show you only the fields and documents you need.</p>
+            <!-- STEP 2: Fill Details (Child Renewal) -->
+            <div id="step2" class="step-content" style="display: none;">
+                <div class="progress">
+                    <div class="step completed">1. Tell us who ✓</div>
+                    <div class="step active">2. Fill details</div>
+                    <div class="step">3. Review</div>
+                </div>
 
-                <div class="form-group">
-                    <label>Who is this passport for?</label>
-                    <div class="radio-group">
-                        <label class="radio-card">
-                            <input type="radio" name="applicant-type" value="adult" required>
-                            <div class="radio-content">
-                                <span class="radio-title">Adult</span>
-                                <span class="radio-desc">Applicant is 18 years or older</span>
-                            </div>
-                        </label>
-                        <label class="radio-card">
-                            <input type="radio" name="applicant-type" value="child" required>
-                            <div class="radio-content">
-                                <span class="radio-title">Child</span>
-                                <span class="radio-desc">Applicant is under 18 years old</span>
-                            </div>
-                        </label>
+                <form id="details-form">
+                    <div class="step-header">
+                        <button type="button" class="btn-back" id="back-to-step1">← Back</button>
+                        <div>
+                            <h2>Child Passport Renewal</h2>
+                            <p class="subtitle">Fill in the details below. We'll validate as you go.</p>
+                        </div>
                     </div>
-                    <p class="guidance" id="applicant-guidance"></p>
-                </div>
 
-                <div class="form-group">
-                    <label>What type of application?</label>
-                    <div class="radio-group">
-                        <label class="radio-card">
-                            <input type="radio" name="application-type" value="new" required>
-                            <div class="radio-content">
-                                <span class="radio-title">New passport</span>
-                                <span class="radio-desc">First-time application or replacement of lost passport</span>
+                    <!-- Child's Information -->
+                    <fieldset>
+                        <legend>Child's Information</legend>
+
+                        <div class="form-group">
+                            <label for="child-name">Child's full name (as in birth certificate)</label>
+                            <input type="text" id="child-name" name="child-name" required
+                                   placeholder="e.g. TAN WEI MING">
+                            <p class="field-guidance">Enter exactly as shown on birth certificate. Use CAPITAL LETTERS. (Made-up rule)</p>
+                            <p class="error-message" id="child-name-error"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="child-nric">Child's NRIC / Birth Certificate No.</label>
+                            <input type="text" id="child-nric" name="child-nric" required
+                                   placeholder="e.g. T1234567A" maxlength="9">
+                            <p class="field-guidance">9 characters: letter, 7 digits, letter. (Made-up format)</p>
+                            <p class="error-message" id="child-nric-error"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="child-dob">Child's date of birth</label>
+                            <input type="date" id="child-dob" name="child-dob" required>
+                            <p class="field-guidance">Child must be under 18 years old. (Made-up rule)</p>
+                            <p class="error-message" id="child-dob-error"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="current-passport">Current passport number</label>
+                            <input type="text" id="current-passport" name="current-passport" required
+                                   placeholder="e.g. E1234567A" maxlength="9">
+                            <p class="field-guidance">From the child's existing passport. Can be expired. (Made-up rule)</p>
+                            <p class="error-message" id="current-passport-error"></p>
+                        </div>
+                    </fieldset>
+
+                    <!-- Parent/Guardian 1 -->
+                    <fieldset>
+                        <legend>Parent / Guardian 1</legend>
+
+                        <div class="form-group">
+                            <label for="parent1-name">Full name</label>
+                            <input type="text" id="parent1-name" name="parent1-name" required
+                                   placeholder="e.g. TAN AH KOW">
+                            <p class="field-guidance">As shown on NRIC. Use CAPITAL LETTERS. (Made-up rule)</p>
+                            <p class="error-message" id="parent1-name-error"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="parent1-nric">NRIC</label>
+                            <input type="text" id="parent1-nric" name="parent1-nric" required
+                                   placeholder="e.g. S1234567A" maxlength="9">
+                            <p class="field-guidance">Parent/guardian must be 21 years or older. (Made-up rule)</p>
+                            <p class="error-message" id="parent1-nric-error"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="parent1-relationship">Relationship to child</label>
+                            <select id="parent1-relationship" name="parent1-relationship" required>
+                                <option value="">Select...</option>
+                                <option value="father">Father</option>
+                                <option value="mother">Mother</option>
+                                <option value="legal-guardian">Legal Guardian</option>
+                            </select>
+                            <p class="field-guidance">Legal guardians must upload court order. (Made-up rule)</p>
+                            <p class="error-message" id="parent1-relationship-error"></p>
+                        </div>
+                    </fieldset>
+
+                    <!-- Parent/Guardian 2 -->
+                    <fieldset>
+                        <legend>Parent / Guardian 2</legend>
+                        <p class="fieldset-note">Both parents must consent for child passport applications. (Made-up rule)</p>
+
+                        <div class="form-group">
+                            <label for="parent2-name">Full name</label>
+                            <input type="text" id="parent2-name" name="parent2-name" required
+                                   placeholder="e.g. LIM MEI LING">
+                            <p class="field-guidance">As shown on NRIC. Use CAPITAL LETTERS. (Made-up rule)</p>
+                            <p class="error-message" id="parent2-name-error"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="parent2-nric">NRIC</label>
+                            <input type="text" id="parent2-nric" name="parent2-nric" required
+                                   placeholder="e.g. S7654321B" maxlength="9">
+                            <p class="field-guidance">Parent/guardian must be 21 years or older. (Made-up rule)</p>
+                            <p class="error-message" id="parent2-nric-error"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="parent2-relationship">Relationship to child</label>
+                            <select id="parent2-relationship" name="parent2-relationship" required>
+                                <option value="">Select...</option>
+                                <option value="father">Father</option>
+                                <option value="mother">Mother</option>
+                                <option value="legal-guardian">Legal Guardian</option>
+                            </select>
+                            <p class="error-message" id="parent2-relationship-error"></p>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="single-parent" name="single-parent">
+                                <span>Only one parent/guardian available</span>
+                            </label>
+                            <p class="field-guidance" id="single-parent-guidance" style="display: none;">
+                                You will need to upload supporting documents (e.g. death certificate, sole custody order). (Made-up rule)
+                            </p>
+                        </div>
+                    </fieldset>
+
+                    <!-- Document Uploads (Placeholder) -->
+                    <fieldset>
+                        <legend>Documents</legend>
+                        <p class="fieldset-note">Upload clear photos or scans. Max 5MB each. (Made-up rule)</p>
+
+                        <div class="form-group">
+                            <label>Child's passport photo</label>
+                            <div class="upload-placeholder">
+                                <button type="button" class="btn-upload" disabled>📷 Upload photo</button>
+                                <span class="upload-hint">(Upload disabled in prototype)</span>
                             </div>
-                        </label>
-                        <label class="radio-card">
-                            <input type="radio" name="application-type" value="renewal" required>
-                            <div class="radio-content">
-                                <span class="radio-title">Renewal</span>
-                                <span class="radio-desc">Current passport expiring or expired</span>
+                            <p class="field-guidance">White background, face clearly visible, taken within last 3 months. (Made-up rule)</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Child's current passport (data page)</label>
+                            <div class="upload-placeholder">
+                                <button type="button" class="btn-upload" disabled>📄 Upload scan</button>
+                                <span class="upload-hint">(Upload disabled in prototype)</span>
                             </div>
-                        </label>
+                        </div>
+                    </fieldset>
+
+                    <!-- Validation Summary -->
+                    <div class="validation-summary" id="validation-summary" style="display: none;">
+                        <h3>⚠️ Please fix the following:</h3>
+                        <ul id="error-list"></ul>
                     </div>
-                    <p class="guidance" id="application-guidance"></p>
-                </div>
 
-                <div class="preview-box" id="preview-box" style="display: none;">
-                    <h3>What you'll need</h3>
-                    <p class="made-up">(Made-up requirements for prototype)</p>
-                    <ul id="requirements-list"></ul>
-                </div>
+                    <!-- Form Progress -->
+                    <div class="form-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <p class="progress-text"><span id="fields-complete">0</span> of <span id="fields-total">10</span> fields complete</p>
+                    </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary" id="next-btn" disabled>
-                        Next: Fill in details
-                    </button>
-                </div>
-            </form>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary" id="review-btn" disabled>
+                            Next: Review application
+                        </button>
+                    </div>
+                </form>
+            </div>
         </main>
 
         <footer>
