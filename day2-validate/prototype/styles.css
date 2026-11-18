@@ -500,3 +500,180 @@ select.invalid {
 .test-controls button:hover {
     background: #6c757d;
 }
+
+/* Step 3: Review Styles */
+.review-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.review-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.review-header h3 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.btn-edit {
+    padding: 4px 12px;
+    background: none;
+    border: 1px solid #c41e3a;
+    color: #c41e3a;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.btn-edit:hover {
+    background: #fef2f4;
+}
+
+.review-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.review-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.review-item.full-width {
+    grid-column: span 2;
+}
+
+.review-label {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.review-value {
+    font-weight: 600;
+}
+
+.single-parent-note {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+    padding: 12px;
+    margin: 0;
+}
+
+.status-pass {
+    color: #2e7d32;
+}
+
+.status-warn {
+    color: #f57c00;
+}
+
+.status-fail {
+    color: #c41e3a;
+}
+
+/* Checklist Preview */
+.checklist-preview {
+    background: #e7f5ff;
+    border: 1px solid #1c7ed6;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.checklist-preview h3 {
+    font-size: 1rem;
+    margin: 0 0 4px 0;
+}
+
+.checklist-preview .subtitle {
+    margin-bottom: 12px;
+}
+
+.checklist-preview .check-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.checklist-preview .check-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(28, 126, 214, 0.2);
+}
+
+.checklist-preview .check-list li:last-child {
+    border-bottom: none;
+}
+
+.checklist-preview .check-pass {
+    color: #2e7d32;
+}
+
+.checklist-preview .check-fail {
+    color: #c41e3a;
+}
+
+/* Success Modal */
+.success-modal {
+    border-top: 4px solid #2e7d32;
+}
+
+.success-modal .modal-icon {
+    color: #2e7d32;
+    font-size: 3rem;
+    background: #f1f8e9;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+}
+
+.success-modal h2 {
+    color: #2e7d32;
+}
+
+.success-details {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 16px;
+    margin: 16px 0;
+    text-align: left;
+}
+
+.success-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.success-item:last-child {
+    border-bottom: none;
+}
+
+.success-label {
+    color: #666;
+}
+
+.success-value {
+    font-weight: 600;
+}

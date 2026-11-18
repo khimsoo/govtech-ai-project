@@ -7,7 +7,8 @@ Extracted from day2-validate/prototype code. All data is synthetic.
 | Type | Note |
 |------|------|
 | **Solid** | Edge case handling — empty reply blocked, placeholder check, single-parent toggle |
-| **Fragile** | Step 3 missing — "Review" step shown in progress bar but not built |
+| **Solid** | Modular code — refactored from monolith to 7 JS modules |
+| **Solid** | Step 3 Review — shows summary, checklist, and submit |
 | **Surprise** | No tests — no unit or integration tests |
 
 ---
