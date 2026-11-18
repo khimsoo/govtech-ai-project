@@ -18,13 +18,82 @@ Most returns could have been avoided before submission. Applicants don't know wh
 
 ## Experience and trust
 
+The AI is native and transparent — users do not trigger it; it runs automatically on events like photo upload. The system validates inputs in real-time and surfaces specific, actionable errors (e.g. "Background not plain white — retake against a white wall").
+
+For edge cases the system cannot handle, an escape hatch ("Request officer review") ensures applicants are never trapped by automation. Officers retain final decision authority on all applications.
+
 ## Risks (market, technical, team)
+
+| Risk | Mitigation |
+|------|------------|
+| **Deadline risk** — Vendor exits in 8 months | MVP in 3 months with 5-month buffer; checkpoint at week 6 |
+| **Edge case complexity** — 40+ exception scenarios for child passports | Escape hatch for officer review; AI scoped to simple preventable errors only |
+| **Integration dependencies** — Singpass, payment, case management | Start vendor data migration discussions early; parallel workstreams |
+| **Over-scoping AI** — Trying to automate judgement calls | AI limited to photo quality; all other validation is rule-based |
 
 ## Build plan and handoff
 
+### Release 1: MVP (Month 1-3)
+
+| Component | Timeline |
+|-----------|----------|
+| Singpass login integration | Month 1 |
+| Application form with rule-based validation | Month 1-2 |
+| Submission storage and status tracking | Month 2 |
+| Email notifications (collection date, rejection) | Month 2 |
+| Security testing and UAT | Month 3 |
+| **Go-live: Replace vendor channel** | **End of Month 3** |
+
+### Release 2: AI Photo Validation (Month 3-4)
+
+Developed concurrently with MVP; ships after go-live.
+
+- Computer vision model for passport photo requirements
+- Checks: face size/position, glasses detection, background colour, lighting/shadows
+- Real-time feedback on upload with specific guidance to fix
+
+### Ongoing
+
+- 2-week sprints for bug fixes and feature releases
+- Continuous improvement based on error rate data
+
+### Checkpoints
+
+- **Week 6:** Form submitting to storage with Singpass — if not working, escalate
+- **Month 2:** MVP feature complete, begin security testing
+- **Month 3:** Go-live decision gate
+
+### Fallback
+
+If behind schedule, cut scope in this order: (1) AI photo validation already in R2, (2) email notifications can be manual, (3) status tracking can be simplified. Core channel must ship.
+
 ## Agent role and guardrails
 
+### What is AI vs Rules
+
+| Component | Technology | Why |
+|-----------|------------|-----|
+| Form routing (myself/on behalf, new/renewal) | Rules | Deterministic logic |
+| Field validation (NRIC format, date logic, age checks) | Rules | Known patterns |
+| Document checklist | Rules | Fixed requirements per path |
+| **Photo quality assessment** | **AI (computer vision)** | Requires model to detect glasses, shadows, background, face position |
+
+### AI Guardrails
+
+- AI does not make approval decisions — officers retain final authority
+- AI does not edit or auto-fill applicant data — only validates and flags
+- AI provides specific, actionable feedback — not generic rejections
+- Low-confidence cases escalate to officer review, not automated rejection
+- Photo rejection rate tracked separately to prove model effectiveness
+
 ## Roles and operating model
+
+| Role | Responsibility |
+|------|----------------|
+| **Product team** | Build MVP, iterate on 2-week sprints, track error rates |
+| **Frontline ops (Director)** | Handle escalations via "Request officer review"; provide feedback on edge cases |
+| **Back-office officers** | Final approval authority; review AI-flagged submissions |
+| **Vendor** | Data migration support; parallel cutover planning |
 
 ## Strategy and roadmap
 
@@ -43,8 +112,52 @@ Most returns could have been avoided before submission. Applicants don't know wh
 
 ## Metrics plan and stop line
 
+### Primary Metrics
+
+| Metric | Baseline (synthetic) | Target | Measured |
+|--------|---------------------|--------|----------|
+| Application error rate | 17% | <8% | Monthly |
+| Photo-related rejections | TBD | 50% reduction | Monthly (Release 2) |
+| Time to complete application | TBD | <5 minutes | Weekly |
+| Applicants stuck >2 min on one field | TBD | <5% | Weekly |
+
+### Stop Line
+
+- **Kill switch:** Applicants getting stuck and unable to proceed
+- **Signal:** >10% of applicants stuck on one page for >2 minutes
+- **Action:** Revert to simpler validation; add officer chat support
+
 ## Evals and gates
+
+### Before Go-Live (Month 3)
+
+- [ ] Security penetration testing passed
+- [ ] Singpass integration certified
+- [ ] 100 test applications submitted end-to-end
+- [ ] Fallback to manual process documented
+- [ ] Officer training on new workflow complete
+
+### Before AI Photo Release (Release 2)
+
+- [ ] Model accuracy >90% on test photo set
+- [ ] False positive rate <5% (legitimate photos wrongly rejected)
+- [ ] A/B test with 10% of traffic for 2 weeks
 
 ## Decision: continue, pivot or stop
 
+**Current decision:** Continue to MVP
+
+**Evidence required for Release 2 (AI photo):**
+- Categorise 100 returned applications — confirm majority are simple preventable errors
+- Photo rejection data shows meaningful volume worth automating
+
+**Pivot triggers:**
+- If error rate doesn't improve after MVP, pivot to officer-assist model (AI suggests, officer confirms)
+- If photo model accuracy <85%, keep manual photo review
+
 ## Open issues
+
+1. **Data migration from vendor** — format and timeline TBD; start discussions now
+2. **Edge case documentation** — need full list of 40+ child passport exceptions from ops team
+3. **Photo training data** — need sample of rejected photos to train/test model
+4. **Hotline capacity** — confirm ops can handle initial spike in "Request officer review" escalations
