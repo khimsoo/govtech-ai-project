@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passport Application - Step 1</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">ICA</div>
+            <h1>Passport Application</h1>
+        </header>
+
+        <div class="notice">
+            <strong>Prototype with made-up data.</strong> All rules and requirements shown are synthetic examples for testing purposes only.
+        </div>
+
+        <main>
+            <div class="progress">
+                <div class="step active">1. Tell us who</div>
+                <div class="step">2. Fill details</div>
+                <div class="step">3. Review</div>
+            </div>
+
+            <form id="triage-form">
+                <h2>Let's start with a few questions</h2>
+                <p class="subtitle">This helps us show you only the fields and documents you need.</p>
+
+                <div class="form-group">
+                    <label>Who is this passport for?</label>
+                    <div class="radio-group">
+                        <label class="radio-card">
+                            <input type="radio" name="applicant-type" value="adult" required>
+                            <div class="radio-content">
+                                <span class="radio-title">Adult</span>
+                                <span class="radio-desc">Applicant is 18 years or older</span>
+                            </div>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="applicant-type" value="child" required>
+                            <div class="radio-content">
+                                <span class="radio-title">Child</span>
+                                <span class="radio-desc">Applicant is under 18 years old</span>
+                            </div>
+                        </label>
+                    </div>
+                    <p class="guidance" id="applicant-guidance"></p>
+                </div>
+
+                <div class="form-group">
+                    <label>What type of application?</label>
+                    <div class="radio-group">
+                        <label class="radio-card">
+                            <input type="radio" name="application-type" value="new" required>
+                            <div class="radio-content">
+                                <span class="radio-title">New passport</span>
+                                <span class="radio-desc">First-time application or replacement of lost passport</span>
+                            </div>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="application-type" value="renewal" required>
+                            <div class="radio-content">
+                                <span class="radio-title">Renewal</span>
+                                <span class="radio-desc">Current passport expiring or expired</span>
+                            </div>
+                        </label>
+                    </div>
+                    <p class="guidance" id="application-guidance"></p>
+                </div>
+
+                <div class="preview-box" id="preview-box" style="display: none;">
+                    <h3>What you'll need</h3>
+                    <p class="made-up">(Made-up requirements for prototype)</p>
+                    <ul id="requirements-list"></ul>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="next-btn" disabled>
+                        Next: Fill in details
+                    </button>
+                </div>
+            </form>
+        </main>
+
+        <footer>
+            <p class="made-up">This is a prototype with synthetic data. Not a real government service.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
