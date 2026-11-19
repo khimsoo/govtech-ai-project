@@ -309,10 +309,10 @@ Decisions confirmed by product owner.
 
 ---
 
-## Open decisions (business owner)
+## Decisions (business owner)
 
-Questions the business owner must answer before signing off.
+Decisions confirmed by business owner.
 
-| # | Question | Options | Risk if wrong |
-|---|----------|---------|---------------|
-| 13 | **`route_to_officer` permission setting?** | (a) Auto — route immediately when checkpoint triggers, (b) Confirm — show applicant "Routing to officer..." and wait for OK | **Auto risk:** Bug or misconfigured rule floods officer queue with false escalations. Stress test 2 showed agent auto-routed unknown fields — what if schema was outdated? **Confirm risk:** Adds friction; applicant might abandon instead of clicking OK. |
+| # | Decision | Answer | Notes |
+|---|----------|--------|-------|
+| 13 | **`route_to_officer` permission setting** | **Auto** | Route immediately when checkpoint triggers. Accept risk of queue flooding if agent misbehaves — mitigate with telemetry (stop condition: error rate >50% pauses validation). |
