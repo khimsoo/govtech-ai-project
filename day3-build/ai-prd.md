@@ -306,3 +306,13 @@ Decisions confirmed by product owner.
 | 10 | **"Request officer review" click in Release 1** | **Show phone number** | Display "Call 6391 6100 for assistance" — manual escape hatch |
 | 11 | **Telemetry for "stuck >2 min" stop condition** | **Build in Release 1** | Track time-on-field; alert ops when >10% stuck |
 | 12 | **What makes validation "uncertain" for #16 Confirm?** | **Edge cases** | Names with hyphens, apostrophes, or non-ASCII; unusual NRIC prefixes; dates near boundaries |
+
+---
+
+## Open decisions (business owner)
+
+Questions the business owner must answer before signing off.
+
+| # | Question | Options | Risk if wrong |
+|---|----------|---------|---------------|
+| 13 | **`route_to_officer` permission setting?** | (a) Auto — route immediately when checkpoint triggers, (b) Confirm — show applicant "Routing to officer..." and wait for OK | **Auto risk:** Bug or misconfigured rule floods officer queue with false escalations. Stress test 2 showed agent auto-routed unknown fields — what if schema was outdated? **Confirm risk:** Adds friction; applicant might abandon instead of clicking OK. |
