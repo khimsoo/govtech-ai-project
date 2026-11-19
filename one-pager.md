@@ -69,22 +69,41 @@ If behind schedule, cut scope in this order: (1) AI photo validation already in 
 
 ## Agent role and guardrails
 
-### What is AI vs Rules
+### What is automated (Release 1)
 
-| Component | Technology | Why |
-|-----------|------------|-----|
-| Form routing (myself/on behalf, new/renewal) | Rules | Deterministic logic |
-| Field validation (NRIC format, date logic, age checks) | Rules | Known patterns |
-| Document checklist | Rules | Fixed requirements per path |
-| **Photo quality assessment** | **AI (computer vision)** | Requires model to detect glasses, shadows, background, face position |
+| Component | Type | What it does |
+|-----------|------|--------------|
+| **Triage routing** | Workflow | Asks who/what, shows only relevant fields. Decides alone. |
+| **Field validation** | Workflow | Checks NRIC format, age, required fields. Decides alone. |
+| **Progress tracking** | Workflow | Counts valid fields, updates progress bar. Decides alone. |
+| **Block submission** | Workflow | Disables "Next" until fields valid. Proposes and waits. |
 
-### AI Guardrails
+### What stays human
 
-- AI does not make approval decisions — officers retain final authority
-- AI does not edit or auto-fill applicant data — only validates and flags
-- AI provides specific, actionable feedback — not generic rejections
-- Low-confidence cases escalate to officer review, not automated rejection
-- Photo rejection rate tracked separately to prove model effectiveness
+| Decision | Why |
+|----------|-----|
+| Approve or reject application | Legal requirement — officers have final authority |
+| Override a validation rule | Exceptions exist — only officer can judge |
+| Change validation rules | Policy decision — product reviews data first |
+| Handle "Request officer review" | Applicant chose to escalate — human responds |
+| Decide passport type for 17y 6m+ | Affects validity period — officer confirms |
+| Contact applicant | All outbound comms require officer action |
+
+### Deferred to Release 2
+
+| Component | Type | Why wait |
+|-----------|------|----------|
+| Photo quality check | Agent (AI) | Needs trained model, <5% false positive gate |
+| Document upload validation | Workflow | Needs file handling backend |
+| Email notifications | Workflow | Needs email service integration |
+
+### Guardrails
+
+- Automation does not approve or reject — officers retain final authority
+- Automation does not edit applicant data — only validates and flags
+- Automation provides specific feedback — not generic errors
+- Applicant can always click "Request officer review" to bypass
+- Stop line: >10% stuck on one field for >2 min → disable blocking, alert ops
 
 ## Roles and operating model
 
