@@ -31,14 +31,14 @@ The agent runs two workflows:
 
 When the applicant answers "Who are you applying for?" and "New or renewal?", show only the fields required for that path.
 
-| Path | Fields |
-|------|--------|
-| Myself × New | 6 |
-| Myself × Renewal | 5 |
-| Child × New | 10 + parent |
-| Child × Renewal | 9 + parent |
-| Adult on behalf × New | 8 + authorisation |
-| Adult on behalf × Renewal | 7 + authorisation |
+| Path | Fields | Field IDs |
+|------|--------|-----------|
+| Myself × New | 6 | name, nric, dob, address, photo, birth_cert |
+| Myself × Renewal | 5 | name, nric, dob, address, photo |
+| Child × New | 10 + parent | child_name, child_nric, child_dob, child_address, child_photo, child_birth_cert, parent1_name, parent1_nric, parent1_relationship, parent2_name, parent2_nric, parent2_relationship |
+| Child × Renewal | 9 + parent | child_name, child_nric, child_dob, child_address, child_photo, passport_number, parent1_name, parent1_nric, parent1_relationship, parent2_name, parent2_nric, parent2_relationship |
+| Adult on behalf × New | 8 + authorisation | adult_name, adult_nric, adult_dob, adult_address, adult_photo, adult_birth_cert, applicant_name, applicant_nric, authorisation_doc |
+| Adult on behalf × Renewal | 7 + authorisation | adult_name, adult_nric, adult_dob, adult_address, adult_photo, passport_number, applicant_name, applicant_nric, authorisation_doc |
 
 If the applicant changes their answer, update the form immediately.
 
@@ -46,14 +46,16 @@ If the applicant changes their answer, update the form immediately.
 
 When the applicant leaves a field (blur) or clicks "Next", check the value against the rule:
 
-| Field | Rule |
-|-------|------|
-| child_name | Non-empty, CAPITALS only |
-| child_nric | Format X1234567X |
-| child_dob | Valid date, age < 18 |
-| passport_number | Format X12345678X |
-| parent1_nric | Format X1234567X, ≠ child |
-| parent2_nric | Format X1234567X, ≠ child, ≠ parent1 (unless single_parent) |
+| Field | Rule | Error message |
+|-------|------|---------------|
+| child_name | Non-empty, CAPITALS only, letters/spaces only | "Enter the child's full name in CAPITAL LETTERS (e.g., TAN WEI MING)" |
+| child_nric | Regex `^[STFG]\d{7}[A-Z]$` | "Enter a valid NRIC or Birth Cert number (e.g., T1234567A)" |
+| child_dob | Valid date, age < 18, not future | "Child must be under 18 years old" |
+| passport_number | Regex `^[A-Z]\d{8}[A-Z]$` | "Enter a valid passport number (e.g., K12345678A)" |
+| parent1_nric | Regex `^[STFG]\d{7}[A-Z]$`, ≠ child_nric | "Enter a valid NRIC different from the child's" |
+| parent2_nric | Regex `^[STFG]\d{7}[A-Z]$`, ≠ child_nric, ≠ parent1_nric (skip if single_parent) | "Enter a valid NRIC different from the child's and Parent 1's" |
+
+**Note:** NRIC validation is regex format only (no checksum). Real checksum validation deferred — see Open decisions.
 
 If valid: green border. If invalid: red border + specific error message. Update progress bar.
 
@@ -67,7 +69,8 @@ If all fields valid: enable "Next" button. If any invalid: disable "Next" button
 |------|---------|-------|--------|
 | `get_validation_rules` | Look up which fields are required | applicant_type, application_type | List of field IDs |
 | `validate_field` | Check one field against its rule | field_name, value, context | `{valid: true}` or `{valid: false, error: "..."}` |
-| `log_event` | Record action for audit | application_id, event_type, details | `{logged: true}` |
+| `log_event` | Record action for audit | session_id, event_type, details | `{logged: true}` |
+| `generate_session_id` | Create unique session ID | — | `{session_id: "sess_<uuid4>"}` |
 | `save_progress` | Store form state | form_data | `{saved: true, timestamp}` |
 | `load_progress` | Retrieve saved form state | — | form_data or null |
 
@@ -178,7 +181,7 @@ When to stop automation and involve a person.
 | Field fails validation 3+ times | Show "Request officer review" prominently | Applicant decides whether to escalate |
 | Applicant clicks "Request officer review" | Queue for officer | Officer reviews |
 | Child age ≥17y 0m | Flag on review screen | Officer confirms passport type |
-| Single parent checkbox + no supporting doc | Flag on review screen | Officer confirms |
+| Single parent checkbox ticked | Flag on review screen (Release 1: no doc upload) | Officer confirms at review |
 | Name contains non-ASCII characters | Flag on review screen | Officer confirms encoding |
 | Unknown applicant_type or application_type | Show error, suggest restart | Applicant restarts or calls hotline |
 
@@ -229,7 +232,7 @@ When to stop automation and involve a person.
 
 ### What NOT to log
 
-- Raw NRIC values (hash if needed)
+- Raw NRIC values (if needed for debugging, hash with SHA-256, first 8 chars only)
 - Full names
 - Dates of birth
 - Any value that could identify a real person
@@ -289,3 +292,17 @@ Decisions confirmed by product owner.
 | 5 | **Progress bar format** | **Percentage + estimated time** | e.g., "70% complete (~2 min remaining)" |
 | 6 | **Age boundary threshold** | **17y 0m** | Route to officer if child is 17 or older — more conservative than 17y 6m |
 | 7 | **Permission setting for action #16** | **Confirm if in doubt** | Auto when validation is certain; Confirm when uncertain |
+
+---
+
+## Open decisions (engineering)
+
+Questions engineering needs answered before build.
+
+| # | Question | Options | Default if no answer |
+|---|----------|---------|----------------------|
+| 8 | **NRIC checksum validation?** | Regex only (current) vs full checksum algorithm | Regex only — checksum adds complexity, may reject valid NRICs from older systems |
+| 9 | **"Estimated time remaining" — how to calculate?** | (a) Average time per field × remaining fields, (b) Fixed estimate per path, (c) Remove feature | Remove feature — show percentage only until we have timing data |
+| 10 | **"Request officer review" click in Release 1?** | (a) Show "Coming soon" message, (b) Show phone number to call, (c) Hide button entirely | Show phone number — applicant has escape hatch, just manual |
+| 11 | **Telemetry for "stuck >2 min" stop condition?** | (a) Build telemetry in Release 1, (b) Defer stop condition to Release 2, (c) Use server logs | Defer to Release 2 — stop condition requires backend |
+| 12 | **What makes validation "uncertain" for #16 Confirm?** | List specific conditions | Never uncertain in Release 1 — all rules are deterministic regex. Confirm only if rule engine fails to load. |
