@@ -126,6 +126,60 @@ Two workflows that run automatically when an applicant interacts with the form:
 
 ---
 
+## Permissions
+
+Every tool the agent uses, with tier and proposed setting.
+
+### Tier definitions
+
+| Tier | What it means |
+|------|---------------|
+| **Read** | Look at data, no change |
+| **Draft** | Prepare output, not yet visible to anyone |
+| **Write** | Change data or UI the applicant sees |
+| **Send** | Deliver to another person (officer, applicant via email) |
+
+### Setting definitions
+
+| Setting | What it means |
+|---------|---------------|
+| **Auto** | Agent does it without asking |
+| **Confirm** | Agent proposes, human confirms |
+| **Block** | Agent cannot do this |
+
+### Tool permissions
+
+| # | Tool | Purpose | Tier | Setting | Notes |
+|---|------|---------|------|---------|-------|
+| 1 | `get_validation_rules` | Look up which fields are required for a path | Read | **Proposed: Auto** | Config lookup, no user data. Stress test 1 used this to detect empty path. |
+| 2 | `validate_field` | Check one field against its rule | Read | **Proposed: Auto** | Reads field value, returns valid/invalid. No change to data. |
+| 3 | `generate_session_id` | Create unique session ID | Write | **Proposed: Auto** | Creates identifier only. No user data. |
+| 4 | `save_progress` | Store form state to localStorage | Write | **Proposed: Auto** | Protects applicant's work. Reversible. |
+| 5 | `load_progress` | Retrieve saved form state | Read | **Proposed: Auto** | Reads own session only. |
+| 6 | `log_event` | Record action for audit trail | Write | **Proposed: Auto** | Stress tests showed logging at every step. No PII logged. |
+| 7 | `alert_ops` | Send alert to ops team | Send | **Proposed: ?** | Stress test 3 used this when rules returned empty. Should agent auto-alert, or confirm first? |
+| 8 | `route_to_officer` | Send application to officer queue | Send | **Proposed: ?** | Stress tests 1 and 2 used this. Blocked in Release 1 (no backend). What setting when enabled? |
+| 9 | `check_photo` | Assess photo quality | Read | **Proposed: ?** | Not in Release 1. When enabled, should confidence < 0.70 auto-route or confirm? |
+| 10 | `send_notification` | Send email/SMS to applicant | Send | **Proposed: Block** | Not in Release 1. Legal requires officer action for all outbound. |
+
+### What stress tests showed
+
+| Stress test | Tool used | What happened |
+|-------------|-----------|---------------|
+| 1 (empty enquiry) | `get_validation_rules` → `route_to_officer` | Rules lookup returned error; agent routed to officer |
+| 2 (fake policy) | `get_validation_rules` → `validate_field` → `route_to_officer` | Agent validated schema fields, flagged unknown fields, routed to officer |
+| 3 (empty rules) | `get_validation_rules` → `alert_ops` | Rules returned empty; agent alerted ops, showed error to applicant |
+
+### Open questions
+
+| # | Question | Options |
+|---|----------|---------|
+| 1 | **`alert_ops` setting?** | Auto (agent alerts without asking) vs Confirm (agent proposes, ops confirms) |
+| 2 | **`route_to_officer` setting when enabled?** | Auto (agent routes without asking) vs Confirm (agent proposes, applicant confirms) |
+| 3 | **`check_photo` setting when enabled?** | Auto (route on low confidence) vs Confirm (show applicant first) |
+
+---
+
 ## Summary
 
 | Category | Count |
@@ -135,5 +189,8 @@ Two workflows that run automatically when an applicant interacts with the form:
 | Human reviews | 6 decisions |
 | Stop conditions | 4 triggers |
 | Stays human | 6 decisions |
+| Tools (Auto proposed) | 6 tools |
+| Tools (setting TBD) | 3 tools |
+| Tools (Block) | 1 tool |
 
 The agent validates and routes. It does not approve, reject, contact, or override.
