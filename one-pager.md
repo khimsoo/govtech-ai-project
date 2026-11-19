@@ -107,12 +107,36 @@ If behind schedule, cut scope in this order: (1) AI photo validation already in 
 
 ## Roles and operating model
 
+### Roles
+
 | Role | Responsibility |
 |------|----------------|
-| **Product team** | Build MVP, iterate on 2-week sprints, track error rates |
-| **Frontline ops (Director)** | Handle escalations via "Request officer review"; provide feedback on edge cases |
-| **Back-office officers** | Final approval authority; review AI-flagged submissions |
-| **Vendor** | Data migration support; parallel cutover planning |
+| **Product Owner** | Defines scope, approves rules, owns roadmap, decides go-live |
+| **Engineering Lead** | Builds and deploys, owns technical decisions within constraints |
+| **Ops Lead** | Monitors telemetry, handles incidents, manages hotline capacity |
+| **Frontline Officer** | Reviews flagged applications, handles escalations, final approval authority |
+| **Policy Lead** | Owns business rules (age thresholds, document requirements), approves rule changes |
+| **Security Lead** | Certifies integrations, approves go-live from security perspective |
+| **Vendor** | Provides data migration support, parallel cutover planning |
+
+### Decision rights
+
+| Harness part | Who decides | Who is consulted | Who is told |
+|--------------|-------------|------------------|-------------|
+| Scope | Product Owner | Engineering, Ops, Policy | Officers, Vendor |
+| Permissions | Product Owner | Engineering, Security, Policy | Ops, Officers |
+| Go-live | Product Owner | All leads | Officers, Vendor |
+| Incident | Ops Lead | Engineering, Product Owner | Officers, Policy |
+
+### Kill switch
+
+| Authority | What they can do |
+|-----------|------------------|
+| Ops Lead | Disable one rule, or pause all validation |
+| Engineering Lead | Roll back to previous version |
+| Product Owner | Turn off automation entirely |
+
+Fallback: forms submit without blocking; officers review manually.
 
 ## Strategy and roadmap
 
