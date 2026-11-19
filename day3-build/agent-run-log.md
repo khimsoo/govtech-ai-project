@@ -451,3 +451,222 @@ All three cases followed the agent instructions in CLAUDE.md:
 - Case 1 validated all fields and completed normally
 - Case 2 triggered a human checkpoint (age boundary) and escalated
 - Case 3 hit a stop condition (missing context) and refused to proceed
+
+---
+
+## Rule Change and Rerun
+
+### Problem with Test Case 2
+
+As an ICA officer reviewing this log, I would not trust **Test Case 2**.
+
+The agent escalated a child aged 17 years 10 months, but the rule in CLAUDE.md said:
+
+> Child's age **exactly** 17 years 11 months
+
+This is inconsistent. Either:
+1. The agent ignored its own rule (17y 10m ≠ 17y 11m)
+2. The rule is too narrow — "exactly" one month is a brittle condition
+
+**Real-world issue:** A child applying at 17y 6m could turn 18 during processing. Child passports have 5-year validity; adult passports have 10-year validity. The officer needs to verify which type to issue based on travel dates.
+
+### Rule Change
+
+**Old rule:**
+> Child's age exactly 17 years 11 months → Route with reason "Near age boundary — verify travel dates"
+
+**New rule:**
+> Child's age 17 years 6 months or older → Route with reason "Near age boundary — verify passport type and validity period"
+
+This gives a 6-month buffer and clarifies what the officer should check.
+
+---
+
+## Test Case 2 Rerun (with fixed rule)
+
+### Input (same as before)
+
+```json
+{
+  "application_id": "APP-2026-M2K7R9",
+  "application_type": "renewal",
+  "applicant_type": "child_under_18",
+  "single_parent": false,
+  "photo_url": "https://storage.example.gov.sg/photos/m2k7r9.jpg",
+  "form_data": {
+    "child_name": "CHEN WEI LONG",
+    "child_nric": "T0812345D",
+    "child_dob": "2008-12-21",
+    "passport_number": "K11223344E",
+    "parent1_name": "CHEN DA WEI",
+    "parent1_nric": "S6512345F",
+    "parent1_relationship": "father",
+    "parent2_name": "ONG SHU FANG",
+    "parent2_nric": "S6898765G",
+    "parent2_relationship": "mother"
+  }
+}
+```
+
+### Turn 1
+
+**Goal:** Validate the child passport renewal application APP-2026-M2K7R9.
+
+**Plan:**
+1. Log validation_started
+2. Validate all required fields
+3. Check age against new rule (≥17y 6m)
+4. If triggered, escalate with updated reason
+
+**Act:**
+```
+log_event("APP-2026-M2K7R9", "validation_started", {
+  "application_type": "renewal",
+  "applicant_type": "child_under_18"
+})
+```
+
+**Observe:**
+```json
+{ "logged": true, "timestamp": "2026-11-19T14:32:10Z" }
+```
+
+**Check:** Event logged. Proceed to field validation.
+
+### Turn 2
+
+**Goal:** Validate child information fields and check age rule.
+
+**Plan:** Validate fields. Check if child_dob results in age ≥ 17 years 6 months.
+
+**Act:**
+```
+validate_field("child_name", "CHEN WEI LONG", {})
+validate_field("child_nric", "T0812345D", {})
+validate_field("child_dob", "2008-12-21", {})
+validate_field("passport_number", "K11223344E", {})
+```
+
+**Observe:**
+```json
+{ "child_name": { "valid": true } }
+{ "child_nric": { "valid": true } }
+{ "child_dob": { "valid": true, "age_years": 17, "age_months": 10 } }
+{ "passport_number": { "valid": true } }
+```
+
+**Check:** Child is 17 years 10 months. New rule triggers at ≥17y 6m. **Rule triggered.**
+
+### Turn 3
+
+**Goal:** Validate parent fields before escalating.
+
+**Plan:** Complete validation so officer has full picture.
+
+**Act:**
+```
+validate_field("parent1_nric", "S6512345F", { "child_nric": "T0812345D" })
+validate_field("parent2_nric", "S6898765G", { "child_nric": "T0812345D", "parent1_nric": "S6512345F" })
+```
+
+**Observe:**
+```json
+{ "parent1_nric": { "valid": true } }
+{ "parent2_nric": { "valid": true } }
+```
+
+**Check:** All fields valid. Proceed to photo check.
+
+### Turn 4
+
+**Goal:** Check photo quality.
+
+**Plan:** Call check_photo. Include result in escalation.
+
+**Act:**
+```
+check_photo("https://storage.example.gov.sg/photos/m2k7r9.jpg")
+```
+
+**Observe:**
+```json
+{
+  "pass": true,
+  "confidence": 0.88,
+  "checks": {
+    "face_visible": true,
+    "face_centred": true,
+    "background": "white",
+    "glasses": false,
+    "shadows": false,
+    "dimensions": "valid"
+  }
+}
+```
+
+**Check:** Photo passes. Now escalate with complete information.
+
+### Turn 5
+
+**Goal:** Escalate to officer with new reason.
+
+**Plan:** Route with updated reason that specifies what officer should verify.
+
+**Act:**
+```
+log_event("APP-2026-M2K7R9", "photo_checked", {
+  "pass": true,
+  "confidence": 0.88
+})
+
+route_to_officer("APP-2026-M2K7R9", "Near age boundary — verify passport type and validity period. Child is 17y 10m, will turn 18 on 2026-12-21. Confirm if child (5-year) or adult (10-year) passport is appropriate for applicant's travel plans.", "escalate")
+
+log_event("APP-2026-M2K7R9", "routed_to_officer", {
+  "reason": "Age ≥17y 6m triggers checkpoint",
+  "priority": "escalate",
+  "age_at_application": "17y 10m",
+  "18th_birthday": "2026-12-21"
+})
+
+log_event("APP-2026-M2K7R9", "validation_complete", {
+  "total_errors": 0,
+  "outcome": "escalated_to_officer",
+  "checkpoint_triggered": "age_boundary"
+})
+```
+
+**Observe:**
+```json
+{ "logged": true }
+{ "routed": true, "queue_position": 5 }
+{ "logged": true }
+{ "logged": true, "timestamp": "2026-11-19T14:32:12Z" }
+```
+
+**Check:** Escalated with clear guidance. Officer knows:
+- Child's exact age (17y 10m)
+- When child turns 18 (2026-12-21)
+- What decision to make (passport type and validity)
+
+### Outcome (Rerun)
+
+| Field | Result |
+|-------|--------|
+| **Status** | ⚠️ Escalated |
+| **Errors** | 0 |
+| **Photo** | Pass (88% confidence) |
+| **Rule triggered** | Age ≥17y 6m (new threshold) |
+| **Reason** | "Verify passport type and validity period" (more specific) |
+| **Action** | Routed to officer with priority `escalate` |
+| **Duration** | 1.9 seconds |
+
+### What changed
+
+| Before | After |
+|--------|-------|
+| Rule: "exactly 17y 11m" | Rule: "17y 6m or older" |
+| Reason: "verify travel dates" | Reason: "verify passport type and validity period" |
+| Agent stretched the rule to cover 17y 10m | Agent correctly applies threshold |
+| Officer unclear on what to check | Officer knows to decide child vs adult passport |
+
+The rerun is now **consistent** with the rule and **actionable** for the officer.
