@@ -112,7 +112,7 @@ If all fields valid: enable "Next" button. If any invalid: disable "Next" button
 
 ## Permissions
 
-Every action the agent can take, with proposed tier and setting.
+Every action the agent can take, with confirmed settings.
 
 ### Tier definitions
 
@@ -133,38 +133,39 @@ Every action the agent can take, with proposed tier and setting.
 
 ### Action list
 
-| # | Action | Tier | Setting | Proposed | Notes |
-|---|--------|------|---------|----------|-------|
-| 1 | Read applicant_type from triage answer | Read | ? | **Proposed: Auto** | Needed to determine which fields to show |
-| 2 | Read application_type from triage answer | Read | ? | **Proposed: Auto** | Needed to determine which fields to show |
-| 3 | Read form field value | Read | ? | **Proposed: Auto** | Needed to validate |
-| 4 | Read single_parent checkbox state | Read | ? | **Proposed: Auto** | Affects parent2 validation |
-| 5 | Read saved progress from localStorage | Read | ? | **Proposed: Auto** | Resume after refresh |
-| 6 | Look up validation rules | Read | ? | **Proposed: Auto** | Config lookup, no user data |
-| 7 | Look up guidance text | Read | ? | **Proposed: Auto** | Config lookup, no user data |
-| 8 | Show/hide form fields based on triage | Write | ? | **Proposed: Auto** | Reversible — applicant can change triage answers |
-| 9 | Show guidance text on field focus | Write | ? | **Proposed: Auto** | Display only, no data changed |
-| 10 | Mark field valid (green border) | Write | ? | **Proposed: Auto** | Positive feedback, no harm |
-| 11 | Mark field invalid (red border) | Write | ? | **Proposed: Auto** | Reversible — applicant can fix and retry |
-| 12 | Show specific error message | Write | ? | **Proposed: Auto** | Helps applicant fix the error |
-| 13 | Update progress bar | Write | ? | **Proposed: Auto** | Display only, no data changed |
-| 14 | Show "What you'll need" checklist | Write | ? | **Proposed: Auto** | Guidance only |
-| 15 | Save progress to localStorage | Write | ? | **Proposed: Auto** | Protects applicant's work |
-| 16 | Disable "Next" button | Write | ? | **Proposed: Confirm** | Blocks applicant until they fix errors |
-| 17 | Enable "Next" button | Write | ? | **Proposed: Auto** | Unblocks applicant |
-| 18 | Show "Request officer review" option | Write | ? | **Proposed: Auto** | Escape hatch — applicant chooses to use it |
-| 19 | Log validation_started event | Write | ? | **Proposed: Auto** | Audit trail, no PII |
-| 20 | Log field_valid event | Write | ? | **Proposed: Auto** | Audit trail, no PII |
-| 21 | Log field_error event | Write | ? | **Proposed: Auto** | Audit trail, hashed values only |
-| 22 | Clear progress on successful submit | Write | ? | **Proposed: Auto** | Cleanup |
-| 23 | Route application to officer queue | Send | ? | **Proposed: Block** | Not in Release 1 — requires backend |
-| 24 | Send email to applicant | Send | ? | **Proposed: Block** | Not in Release 1 — requires email service |
-| 25 | Send SMS to applicant | Send | ? | **Proposed: Block** | Not in Release 1 — requires SMS service |
-| 26 | Approve application | Write | ? | **Proposed: Block** | Officers only — legal requirement |
-| 27 | Reject application | Write | ? | **Proposed: Block** | Officers only — legal requirement |
-| 28 | Edit applicant-submitted data | Write | ? | **Proposed: Block** | Agent validates, never edits |
-| 29 | Override a validation rule | Write | ? | **Proposed: Block** | Officers only |
-| 30 | Access other applicants' data | Read | ? | **Proposed: Block** | Privacy — one application at a time |
+| # | Action | Tier | Setting | Notes |
+|---|--------|------|---------|-------|
+| 1 | Read applicant_type from triage answer | Read | **Auto** | Needed to determine which fields to show |
+| 2 | Read application_type from triage answer | Read | **Auto** | Needed to determine which fields to show |
+| 3 | Read form field value | Read | **Auto** | Needed to validate |
+| 4 | Read single_parent checkbox state | Read | **Auto** | Affects parent2 validation |
+| 5 | Read saved progress from localStorage | Read | **Auto** | Resume after refresh |
+| 6 | Look up validation rules | Read | **Auto** | Config lookup, no user data |
+| 7 | Look up guidance text | Read | **Auto** | Config lookup, no user data |
+| 8 | Show/hide form fields based on triage | Write | **Auto** | Reversible — applicant can change triage answers |
+| 9 | Show guidance text on field focus | Write | **Auto** | Display only, no data changed |
+| 10 | Mark field valid (green border) | Write | **Auto** | Positive feedback, no harm |
+| 11 | Mark field invalid (red border) | Write | **Auto** | Reversible — applicant can fix and retry |
+| 12 | Show specific error message | Write | **Auto** | On first blur; helps applicant fix immediately |
+| 13 | Update progress bar | Write | **Auto** | Shows percentage + estimated time remaining |
+| 14 | Show "What you'll need" checklist | Write | **Auto** | Guidance only |
+| 15 | Save progress to localStorage | Write | **Auto** | Protects applicant's work |
+| 16 | Disable "Next" button | Write | **Confirm** | Auto blocks; Confirm if validation is uncertain |
+| 17 | Enable "Next" button | Write | **Auto** | Unblocks applicant |
+| 18 | Show "Request officer review" option | Write | **Auto** | Appears whenever any error occurs |
+| 19 | Log validation_started event | Write | **Auto** | Audit trail, no PII |
+| 20 | Log field_valid event | Write | **Auto** | Audit trail, no PII |
+| 21 | Log field_error event | Write | **Auto** | Audit trail, hashed values only |
+| 22 | Clear progress on successful submit | Write | **Auto** | Cleanup |
+| 23 | Prompt user when localStorage full | Write | **Auto** | Ask to increase storage or delete old files |
+| 24 | Route application to officer queue | Send | **Block** | Not in Release 1 — requires backend |
+| 25 | Send email to applicant | Send | **Block** | Not in Release 1 — requires email service |
+| 26 | Send SMS to applicant | Send | **Block** | Not in Release 1 — requires SMS service |
+| 27 | Approve application | Write | **Block** | Officers only — legal requirement |
+| 28 | Reject application | Write | **Block** | Officers only — legal requirement |
+| 29 | Edit applicant-submitted data | Write | **Block** | Agent validates, never edits |
+| 30 | Override a validation rule | Write | **Block** | Officers only |
+| 31 | Access other applicants' data | Read | **Block** | Privacy — one application at a time |
 
 ---
 
@@ -252,7 +253,7 @@ Rules that must not change without policy review.
 | Parent NRICs must differ | Business logic | Catches copy-paste errors |
 | Single-parent disables parent2 fields | UX decision, tested | Prevents confusion |
 | Validation on blur, not keystroke | UX decision, tested | Users found keystroke annoying |
-| Progress bar counts valid fields | UX decision, tested | Motivates completion |
+| Progress bar shows percentage + estimated time | Product decision | e.g., "70% complete (~2 min remaining)" |
 | Labels match across portals | Consistency requirement | "Parent/Guardian 1" everywhere |
 | Officer must review before any outbound | Legal | No auto-send |
 
@@ -277,14 +278,14 @@ Decisions within engineering's authority — no product approval needed.
 
 ## Open decisions
 
-Decisions that need your input before engineering proceeds.
+Decisions confirmed by product owner.
 
-| # | Decision | Options | Impact | Your pick |
-|---|----------|---------|--------|-----------|
-| 1 | **Disable "Next" button setting** | Auto (agent blocks), Confirm (applicant clicks to proceed anyway), or somewhere in between? | Auto = fewer errors submitted, more friction. Confirm = applicant can override, more errors reach officer. | ___________ |
-| 2 | **Show error on first blur or only after "Next" click?** | First blur (immediate feedback) vs "Next" click (batch feedback) | First blur = catches errors early but may annoy. Next click = less interruption but errors pile up. | ___________ |
-| 3 | **How long before "Request officer review" appears?** | After 3 failed attempts on same field? After 2 minutes stuck? Always visible? | Too early = encourages bypass. Too late = frustrates stuck users. | ___________ |
-| 4 | **What happens when localStorage is full?** | Continue without save? Show warning? Clear old sessions? | Affects applicants who abandon and return. | ___________ |
-| 5 | **Should progress bar show "7 of 10" or "70%"?** | Count vs percentage | Prototype used count. Percentage is standard. Needs user testing if changed. | ___________ |
-| 6 | **Age boundary: 17y 6m or different?** | 17y 6m (current), 17y 0m (more conservative), 17y 9m (less conservative) | Affects how many applications route to officer. | ___________ |
-| 7 | **Permission setting for action #16 (disable Next button)** | Auto or Confirm? | See Permissions table above. | ___________ |
+| # | Decision | Answer | Notes |
+|---|----------|--------|-------|
+| 1 | **Disable "Next" button setting** | **Auto** | Agent blocks submission until errors fixed |
+| 2 | **Show error on first blur or only after "Next" click?** | **First blur** | Immediate feedback catches errors early |
+| 3 | **When does "Request officer review" appear?** | **Whenever there is any error** | Always available as escape hatch |
+| 4 | **What happens when localStorage is full?** | **Prompt user** | Ask to increase storage or delete old files |
+| 5 | **Progress bar format** | **Percentage + estimated time** | e.g., "70% complete (~2 min remaining)" |
+| 6 | **Age boundary threshold** | **110** | ⚠️ Needs clarification — did you mean 17y 10m? Current rule is 17y 6m for child→adult passport boundary |
+| 7 | **Permission setting for action #16** | **Confirm if in doubt** | Auto when validation is certain; Confirm when uncertain |
