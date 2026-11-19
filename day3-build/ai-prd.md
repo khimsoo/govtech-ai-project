@@ -297,12 +297,12 @@ Decisions confirmed by product owner.
 
 ## Open decisions (engineering)
 
-Questions engineering needs answered before build.
+Decisions confirmed by product owner.
 
-| # | Question | Options | Default if no answer |
-|---|----------|---------|----------------------|
-| 8 | **NRIC checksum validation?** | Regex only (current) vs full checksum algorithm | Regex only — checksum adds complexity, may reject valid NRICs from older systems |
-| 9 | **"Estimated time remaining" — how to calculate?** | (a) Average time per field × remaining fields, (b) Fixed estimate per path, (c) Remove feature | Remove feature — show percentage only until we have timing data |
-| 10 | **"Request officer review" click in Release 1?** | (a) Show "Coming soon" message, (b) Show phone number to call, (c) Hide button entirely | Show phone number — applicant has escape hatch, just manual |
-| 11 | **Telemetry for "stuck >2 min" stop condition?** | (a) Build telemetry in Release 1, (b) Defer stop condition to Release 2, (c) Use server logs | Defer to Release 2 — stop condition requires backend |
-| 12 | **What makes validation "uncertain" for #16 Confirm?** | List specific conditions | Never uncertain in Release 1 — all rules are deterministic regex. Confirm only if rule engine fails to load. |
+| # | Decision | Answer | Notes |
+|---|----------|--------|-------|
+| 8 | **NRIC checksum validation?** | **Regex only** | No checksum — avoids rejecting valid NRICs from older systems |
+| 9 | **"Estimated time remaining" calculation** | **Average time per field × remaining fields** | Track field completion times; recalculate on each blur |
+| 10 | **"Request officer review" click in Release 1** | **Show phone number** | Display "Call 6391 6100 for assistance" — manual escape hatch |
+| 11 | **Telemetry for "stuck >2 min" stop condition** | **Build in Release 1** | Track time-on-field; alert ops when >10% stuck |
+| 12 | **What makes validation "uncertain" for #16 Confirm?** | **Edge cases** | Names with hyphens, apostrophes, or non-ASCII; unusual NRIC prefixes; dates near boundaries |
