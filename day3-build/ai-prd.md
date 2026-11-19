@@ -177,7 +177,7 @@ When to stop automation and involve a person.
 |---------|--------------|----------|
 | Field fails validation 3+ times | Show "Request officer review" prominently | Applicant decides whether to escalate |
 | Applicant clicks "Request officer review" | Queue for officer | Officer reviews |
-| Child age ≥17y 6m | Flag on review screen | Officer confirms passport type |
+| Child age ≥17y 0m | Flag on review screen | Officer confirms passport type |
 | Single parent checkbox + no supporting doc | Flag on review screen | Officer confirms |
 | Name contains non-ASCII characters | Flag on review screen | Officer confirms encoding |
 | Unknown applicant_type or application_type | Show error, suggest restart | Applicant restarts or calls hotline |
@@ -287,5 +287,5 @@ Decisions confirmed by product owner.
 | 3 | **When does "Request officer review" appear?** | **Whenever there is any error** | Always available as escape hatch |
 | 4 | **What happens when localStorage is full?** | **Prompt user** | Ask to increase storage or delete old files |
 | 5 | **Progress bar format** | **Percentage + estimated time** | e.g., "70% complete (~2 min remaining)" |
-| 6 | **Age boundary threshold** | **110** | ⚠️ Needs clarification — did you mean 17y 10m? Current rule is 17y 6m for child→adult passport boundary |
+| 6 | **Age boundary threshold** | **17y 0m** | Route to officer if child is 17 or older — more conservative than 17y 6m |
 | 7 | **Permission setting for action #16** | **Confirm if in doubt** | Auto when validation is certain; Confirm when uncertain |
