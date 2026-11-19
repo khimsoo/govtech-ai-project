@@ -142,6 +142,7 @@ Stop and route to officer when:
 | Single parent without declaration | Route with reason "Single parent checkbox ticked but no supporting document flagged" |
 | Name contains non-ASCII characters | Route with reason "Name encoding needs verification" |
 | Any field fails validation 3+ times in session | Route with reason "Applicant may need assistance" |
+| Form contains fields not in schema | Route with reason "Unknown fields submitted — officer should review" |
 
 Never auto-reject. When uncertain, escalate.
 
