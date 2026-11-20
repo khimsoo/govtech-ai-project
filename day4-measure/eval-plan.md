@@ -10,23 +10,23 @@ All data is synthetic and for testing only.
 
 | Responsibility | Role | What they do |
 |----------------|------|--------------|
-| **Sign the pass bar** | Product Owner | Reviews eval results, confirms pass/fail, decides go/no-go for release |
+| **Sign the pass bar** | Business Owner | Reviews eval results, confirms pass/fail, decides go/no-go for release |
 | **Write test cases** | Engineering Lead | Creates new eval cases when features are added or bugs are found |
 | **Refresh test cases** | Engineering Lead | Updates cases when policy rules change (consulted by Policy Lead) |
 | **Run the eval** | Engineering Lead | Executes all 18 cases, scores each dimension, records results |
-| **Review weekly sample** | Product Owner | Spot-checks 3 random cases from each weekly run to verify scoring consistency |
-| **Escalate deal-breaker failures** | Engineering Lead | Notifies Product Owner and Ops Lead immediately if D3 or any deal-breaker fails |
-| **Approve dimension changes** | Product Owner | Confirms new dimensions or changes to existing ones (consults Policy Lead for rule-based dimensions) |
+| **Review weekly sample** | Business Owner | Spot-checks 3 random cases from each weekly run to verify scoring consistency |
+| **Escalate deal-breaker failures** | Engineering Lead | Notifies Business Owner and Ops Lead immediately if D3 or any deal-breaker fails |
+| **Approve dimension changes** | Business Owner | Confirms new dimensions or changes to existing ones (consults Policy Lead for rule-based dimensions) |
 | **Calibrate graders** | Engineering Lead | Runs calibration session before each evaluator's first eval |
 
 ### Decision rights for eval
 
 | Decision | Who decides | Who is consulted | Who is told |
 |----------|-------------|------------------|-------------|
-| Pass bar thresholds | Product Owner | Policy Lead, Engineering Lead | Ops Lead |
-| New test cases | Engineering Lead | Product Owner | Ops Lead |
-| Deal-breaker designation | Product Owner | Policy Lead, Security Lead | Engineering Lead, Ops Lead |
-| Release after pass | Product Owner | Engineering Lead, Ops Lead | Frontline Officers |
+| Pass bar thresholds | Business Owner | Policy Lead, Engineering Lead | Ops Lead |
+| New test cases | Engineering Lead | Business Owner | Ops Lead |
+| Deal-breaker designation | Business Owner | Policy Lead, Security Lead | Engineering Lead, Ops Lead |
+| Release after pass | Business Owner | Engineering Lead, Ops Lead | Frontline Officers |
 | Release after fail | Not allowed | — | — |
 
 ---
@@ -47,8 +47,8 @@ All data is synthetic and for testing only.
 | Day | Time | Activity |
 |-----|------|----------|
 | Monday 09:00 | Weekly eval run | Engineering Lead runs all 18 cases |
-| Monday 11:00 | Results review | Product Owner reviews results, signs off or escalates |
-| Friday 16:00 | Weekly sample check | Product Owner spot-checks 3 cases from Monday's run |
+| Monday 11:00 | Results review | Business Owner reviews results, signs off or escalates |
+| Friday 16:00 | Weekly sample check | Business Owner spot-checks 3 cases from Monday's run |
 
 ### Pre-release gate
 
@@ -120,10 +120,10 @@ Reduce the 17% application error rate by catching preventable mistakes at submis
 
 | Day | Activity | Owner | Deliverable |
 |-----|----------|-------|-------------|
-| Day 1 | Confirm pass bar with stakeholders | Product Owner | Signed-off pass bar in human-rubric.md |
+| Day 1 | Confirm pass bar with stakeholders | Business Owner | Signed-off pass bar in human-rubric.md |
 | Day 2 | Run baseline eval (all 18 cases) | Engineering Lead | eval-results.md with baseline scores |
 | Day 3 | Calibrate first grader | Engineering Lead | Calibration scores recorded |
-| Day 4 | Review results with Product Owner | Product Owner | Go/no-go for go-live |
+| Day 4 | Review results with Business Owner | Business Owner | Go/no-go for go-live |
 | Day 5 | Document any fixes needed | Engineering Lead | Bug tickets filed |
 
 ### Week 2: Pre-go-live
@@ -133,7 +133,7 @@ Reduce the 17% application error rate by catching preventable mistakes at submis
 | Day 8 | Fix any failing cases | Engineering Lead | Updated CLAUDE.md |
 | Day 9 | Rerun affected cases | Engineering Lead | Updated eval-results.md |
 | Day 10 | Final eval run (all 18 cases) | Engineering Lead | 18/18 pass, 0 deal-breakers |
-| Day 11 | Product Owner signs off | Product Owner | Go-live approval |
+| Day 11 | Business Owner signs off | Business Owner | Go-live approval |
 | Day 12 | **Go-live** | Engineering Lead | Agent in production |
 
 ### Week 3: First production week
@@ -142,9 +142,9 @@ Reduce the 17% application error rate by catching preventable mistakes at submis
 |-----|----------|-------|-------------|
 | Day 15 | Monitor production telemetry | Ops Lead | Dashboard review |
 | Day 16 | First weekly eval run | Engineering Lead | eval-results.md updated |
-| Day 17 | Review results + production data | Product Owner | Comparison: eval vs. production |
+| Day 17 | Review results + production data | Business Owner | Comparison: eval vs. production |
 | Day 18 | Identify escaped bugs (if any) | Engineering Lead | New test cases (if needed) |
-| Day 19 | Friday sample check | Product Owner | 3 cases spot-checked |
+| Day 19 | Friday sample check | Business Owner | 3 cases spot-checked |
 
 ### Week 4: Stabilise
 
@@ -153,8 +153,8 @@ Reduce the 17% application error rate by catching preventable mistakes at submis
 | Day 22 | Second weekly eval run | Engineering Lead | eval-results.md updated |
 | Day 23 | Review + add cases for escaped bugs | Engineering Lead | Updated eval-cases.md |
 | Day 24 | Calibrate second grader (if needed) | Engineering Lead | Calibration scores recorded |
-| Day 25 | Month-end metrics review | Product Owner | Error rate vs. baseline |
-| Day 26 | Adjust pass bar if needed | Product Owner | Updated human-rubric.md |
+| Day 25 | Month-end metrics review | Business Owner | Error rate vs. baseline |
+| Day 26 | Adjust pass bar if needed | Business Owner | Updated human-rubric.md |
 
 ### Success criteria at Day 30
 
@@ -172,10 +172,10 @@ Reduce the 17% application error rate by catching preventable mistakes at submis
 
 | Question | Answer |
 |----------|--------|
-| Who signs the pass bar? | Product Owner |
+| Who signs the pass bar? | Business Owner |
 | Who writes test cases? | Engineering Lead |
 | Who runs the eval? | Engineering Lead |
-| Who reviews a weekly sample? | Product Owner |
+| Who reviews a weekly sample? | Business Owner |
 | When does it run? | Weekly, before every release, after policy/rule change |
 | What's the goal? | Reduce 17% error rate to <8% |
 | What's the stop line? | Any deal-breaker fails, or >2 escaped bugs in one week |
