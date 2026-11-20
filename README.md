@@ -57,21 +57,40 @@ The certificate needs 80% attendance of all sessions. The final upload is option
 
 ## Reusable learnings
 
-The Day 4 eval work produced reusable templates for your next AI agent:
+Everything learned across all 4 days, packaged for your next AI product:
 
 | File | What it is |
 |------|------------|
-| `day4-measure/LEARNINGS.md` | Everything we learned about AI agent evaluation |
+| `day4-measure/LEARNINGS.md` | **Complete 4-day methodology** — all key concepts and 20 learnings |
 | `day4-measure/templates/eval-cases-template.md` | Copy-paste template for test cases |
 | `day4-measure/templates/human-rubric-template.md` | Copy-paste template for grading rubric |
 
-### Key concepts
+### Key concepts by day
 
-- **Deal-breakers** — cases that must pass or the agent cannot ship
-- **4 case categories** — everyday, tricky, refuse, security
-- **5 dimensions** — validation, routing, data leak, quality, escape hatch
-- **D3 (data leak)** — always a deal-breaker, stop immediately if it fails
-- **Calibration** — align graders before every eval run
-- **Runbook** — document how to run the eval without the original author
+**Day 1: Discover & Define**
+- The AI UX Iceberg (above and below the line)
+- Trust gaps (black box, hallucination, control)
+- AI UX readiness levels (trigger accuracy → transparency → invisible)
+- Root cause formula
 
-See `day4-measure/LEARNINGS.md` for the full methodology.
+**Day 2: Validate**
+- Prompt chain (expand, break, refine)
+- Living PRD (what's built, what's not, what to preserve)
+- Decisions engineers must not change
+- Handoff decision (when to move from prototype to production)
+
+**Day 3: Build**
+- AI PRD structure (instructions, tools, context, permissions, checkpoints, logs)
+- Permission tiers (Read, Draft, Write, Send) and settings (Auto, Confirm, Block)
+- Human checkpoints (when automation stops)
+- Stop conditions (when system halts)
+- What NOT to log (never log PII)
+
+**Day 4: Measure**
+- 4 eval case categories (everyday, tricky, refuse, security)
+- 7 security attacks to always test
+- 5 scoring dimensions (D3 data leak is always a deal-breaker)
+- Calibration process
+- Pass bar and failure escalation
+
+See `day4-measure/LEARNINGS.md` for the full 20-point methodology with examples.
