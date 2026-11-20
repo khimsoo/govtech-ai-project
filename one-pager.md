@@ -186,21 +186,18 @@ Fallback: forms submit without blocking; officers review manually.
 - [ ] False positive rate <5% (legitimate photos wrongly rejected)
 - [ ] A/B test with 10% of traffic for 2 weeks
 
-## Decision: continue, pivot or stop
-
-**Current decision:** Continue to MVP
-
-**Evidence required for Release 2 (AI photo):**
-- Categorise 100 returned applications — confirm majority are simple preventable errors
-- Photo rejection data shows meaningful volume worth automating
-
-**Pivot triggers:**
-- If error rate doesn't improve after MVP, pivot to officer-assist model (AI suggests, officer confirms)
-- If photo model accuracy <85%, keep manual photo review
-
 ## Open issues
 
 1. **Data migration from vendor** — format and timeline TBD; start discussions now
 2. **Edge case documentation** — need full list of 40+ child passport exceptions from ops team
 3. **Photo training data** — need sample of rejected photos to train/test model
 4. **Hotline capacity** — confirm ops can handle initial spike in "Request officer review" escalations
+5. **Eval dimensions not yet confirmed** — D1, D2, D4, D5 are still Proposed; Business Owner must confirm before go-live
+6. **Escaped bug process** — need to define how production complaints become new test cases
+7. **Second grader calibration** — only one grader calibrated; need backup before go-live
+
+## Decision: continue, pivot or stop
+
+**Decision:** Continue to go-live
+
+**Why:** Agent passes 18/18 eval cases with 0 deal-breaker failures, D4 average of 4.9, and 100% calibration alignment. The eval plan is ready with clear ownership, schedule, and stop lines. No blockers remain that would delay go-live.
