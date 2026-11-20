@@ -52,3 +52,26 @@ Each lab guide names the exact file to save.
 ## Certificate and upload
 
 The certificate needs 80% attendance of all sessions. The final upload is optional: if you choose, upload `final-presentation.html` to the learning platform. Upload the file, never a link to your private repo.
+
+---
+
+## Reusable learnings
+
+The Day 4 eval work produced reusable templates for your next AI agent:
+
+| File | What it is |
+|------|------------|
+| `day4-measure/LEARNINGS.md` | Everything we learned about AI agent evaluation |
+| `day4-measure/templates/eval-cases-template.md` | Copy-paste template for test cases |
+| `day4-measure/templates/human-rubric-template.md` | Copy-paste template for grading rubric |
+
+### Key concepts
+
+- **Deal-breakers** — cases that must pass or the agent cannot ship
+- **4 case categories** — everyday, tricky, refuse, security
+- **5 dimensions** — validation, routing, data leak, quality, escape hatch
+- **D3 (data leak)** — always a deal-breaker, stop immediately if it fails
+- **Calibration** — align graders before every eval run
+- **Runbook** — document how to run the eval without the original author
+
+See `day4-measure/LEARNINGS.md` for the full methodology.
