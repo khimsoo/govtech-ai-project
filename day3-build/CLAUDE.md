@@ -138,7 +138,7 @@ Stop and route to officer when:
 |-----------|--------|
 | Photo confidence < 0.70 | Route with reason "Photo quality uncertain — officer review needed" |
 | Applicant clicked "Request officer review" | Route with priority `urgent` |
-| Child's age 17 years 6 months or older | Route with reason "Near age boundary — verify passport type and validity period" |
+| Child's age 17 years 0 months or older | Route with reason "Near age boundary — verify passport type and validity period" |
 | Single parent without declaration | Route with reason "Single parent checkbox ticked but no supporting document flagged" |
 | Name contains non-ASCII characters | Route with reason "Name encoding needs verification" |
 | Any field fails validation 3+ times in session | Route with reason "Applicant may need assistance" |
