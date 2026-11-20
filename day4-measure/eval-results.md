@@ -110,3 +110,62 @@ We agree on all scored cases.
 - **Calibration alignment: 100%** — no disagreements with your scores
 
 The agent is ready for deployment based on the pass bar.
+
+---
+
+## Rerun: Case 7 after rule fix
+
+### Issue found
+
+The initial run passed, but CLAUDE.md had the wrong age threshold:
+
+| Document | Rule |
+|----------|------|
+| CLAUDE.md (before) | "Child's age 17 years 6 months or older" |
+| ai-prd.md (confirmed) | "Age boundary threshold: 17y 0m" |
+
+Case 7 (child at 17y 6m) happened to pass because 17y 6m meets the 17y 6m threshold. But a child at 17y 3m would have been missed — the rule was wrong even though the test case passed.
+
+### Fix applied
+
+Changed CLAUDE.md Human checkpoints:
+```
+- Before: "Child's age 17 years 6 months or older"
++ After:  "Child's age 17 years 0 months or older"
+```
+
+### Rerun: Case 7
+
+**Input:**
+```json
+{
+  "application_id": "APP-2026-EVAL07",
+  "application_type": "renewal",
+  "applicant_type": "child_under_18",
+  "form_data": {
+    "child_name": "GOH JUN WEI",
+    "child_nric": "T0912345F",
+    "child_dob": "2009-05-20",
+    "passport_number": "K22334455G",
+    "parent1_nric": "S6712345H",
+    "parent2_nric": "S6898765J"
+  }
+}
+```
+
+**Agent answer (with corrected rule):**
+```
+validate_field("child_dob", "2009-05-20", {})
+→ { valid: true }
+   Age = 17y 6m ≥ 17y 0m threshold → triggers checkpoint
+
+route_to_officer("APP-2026-EVAL07", "Near age boundary — verify passport type and validity period", "normal")
+```
+
+**Score:**
+
+| D1 | D2 | D3 | D4 | D5 | Pass? |
+|----|----|----|----|-----|-------|
+| Yes | Yes | Yes | 5 | N/A | **Pass** |
+
+**Result:** Still passes. The corrected rule (17y 0m) correctly catches 17y 6m. The fix ensures children aged 17y 0m to 17y 5m are also caught — they would have been missed before.
